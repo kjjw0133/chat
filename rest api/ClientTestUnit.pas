@@ -1,4 +1,4 @@
-﻿unit ClientTestUnit;
+unit ClientTestUnit;
 
 interface
 
@@ -59,8 +59,9 @@ begin
   ComboBoxEndpoint.Items.Add('POST /api/logout - 로그아웃');
   ComboBoxEndpoint.Items.Add('GET /api/users - 사용자 목록 조회');
   ComboBoxEndpoint.Items.Add('GET /api/users/{id} - 특정 사용자 조회');
-  ComboBoxEndpoint.Items.Add('PUT /api/users/{id} - 사용자 수정');
+  ComboBoxEndpoint.Items.Add('PUT /api/users/{id} - 사용자 전체 수정');
   ComboBoxEndpoint.Items.Add('DELETE /api/users/{id} - 사용자 삭제');
+  ComboBoxEndpoint.Items.Add('PATCH /api/users/{id} - 사용자 수정');
   ComboBoxEndpoint.ItemIndex := 0;
 
   // 기본 URL 설정
@@ -227,6 +228,12 @@ begin
         Endpoint := '/api/users/' + Resourceld;
         Method := TRESTRequestMethod.rmDELETE;
       end;
+
+      7: // PATCH /api/users/[id]
+      begin
+        Endpoint := '/api/users/' + Resourceld;
+        Method := TRESTRequestMethod.rmPATCH;
+      end
     else
       Endpoint := '/api/users';
       Method := TRESTRequestMethod.rmGET;
@@ -236,7 +243,7 @@ begin
     RESTRequest1.Method := Method;
 
     // Request Body 설정 (POST, PUT의 경우)
-    if (Method in [TRESTRequestMethod.rmPOST, TRESTRequestMethod.rmPUT]) and
+    if (Method in [TRESTRequestMethod.rmPOST, TRESTRequestMethod.rmPUT, TRESTRequestMethod.rmPATCH]) and
        (MemoRequestBody.Text <> '') then
     begin
       RESTRequest1.ClearBody;
