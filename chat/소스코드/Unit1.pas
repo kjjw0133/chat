@@ -1,4 +1,4 @@
-﻿unit Unit1;
+unit Unit1;
 
 interface
 
@@ -332,6 +332,8 @@ begin
     if (LastDateStr <> TodayStr) then
     begin
       RichEdit1.Paragraph.Alignment := taCenter;
+      RichEdit1.Paragraph.LeftIndent := 0;
+      RichEdit1.Paragraph.RightIndent := 0;
       RichEdit1.SelStart := RichEdit1.GetTextLen;
       RichEdit1.SelAttributes.Size := 9;
       RichEdit1.SelAttributes.Color := clGray;
@@ -408,6 +410,8 @@ begin
          (Trim(FDQueryMembers.FieldByName('contents').AsString) = '') then
       begin
         RichEdit1.Paragraph.Alignment := taCenter;
+        RichEdit1.Paragraph.LeftIndent := 0;
+        RichEdit1.Paragraph.RightIndent := 0;
         RichEdit1.SelStart := RichEdit1.GetTextLen;
         RichEdit1.SelAttributes.Size := 9;
         RichEdit1.SelAttributes.Color := clGray;
@@ -462,6 +466,8 @@ begin
          (Trim(FDQueryMembers.FieldByName('contents').AsString) = '') then
       begin
         RichEdit1.Paragraph.Alignment := taCenter;
+        RichEdit1.Paragraph.LeftIndent := 0;
+        RichEdit1.Paragraph.RightIndent := 0;
         RichEdit1.SelStart := RichEdit1.GetTextLen;
         RichEdit1.SelAttributes.Size := 9;
         RichEdit1.SelAttributes.Color := clGray;
