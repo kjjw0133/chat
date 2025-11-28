@@ -102,9 +102,6 @@ procedure TForm1.AddChatBubble(const SenderName, Message, Time: string; IsMe: Bo
 begin
   RichEdit1.SelStart := RichEdit1.GetTextLen;
 
-  // ============================
-  //  오른쪽(내 메시지)
-  // ============================
   if IsMe then
   begin
     RichEdit1.Paragraph.Alignment := taRightJustify;
@@ -586,3 +583,4 @@ begin
 end;
 
 end.
+
