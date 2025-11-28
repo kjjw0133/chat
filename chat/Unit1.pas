@@ -1,4 +1,4 @@
-﻿unit Unit1;
+unit Unit1;
 
 interface
 
@@ -31,6 +31,8 @@ type
     ClientSocket1: TClientSocket;
     FDQuery1: TFDQuery;
     Edit1: TEdit;
+    procedure Panel1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure Button1Click(Sender: TObject);
     procedure Edit1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
@@ -75,6 +77,26 @@ implementation
 uses Unit2, Unit3, Unit8, Unit7, Unit9, Unit11;
 
 {$R *.dfm}
+const
+  WM_NCLBUTTONDOWN = $00A1;
+  HTCAPTION = 2;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  BorderStyle := bsSingle;
+  RichEdit1.Clear;
+  Edit1.Clear;
+end;
+
+procedure TForm1.Panel1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if Button = mbLeft then
+  begin
+    ReleaseCapture;
+    SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+  end;
+end;
 
 procedure TForm1.AddChatBubble(const SenderName, Message, Time: string; IsMe: Boolean);
 begin
@@ -111,9 +133,6 @@ begin
     RichEdit1.SelText := Time + #13#10#13#10;
   end
 
-  // ============================
-  //  왼쪽(상대 메시지)
-  // ============================
   else
   begin
     RichEdit1.Paragraph.Alignment := taLeftJustify;
@@ -544,24 +563,19 @@ begin
   end;
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
-begin
-  RichEdit1.Clear;
-  Edit1.Clear;
-end;
-
 procedure TForm1.FormShow(Sender: TObject);
 begin
   if not ClientSocket1.Active then
   begin
     ClientSocket1.Address := '127.0.0.1';
     ClientSocket1.Port := 8080;
-    ClientSocket1.Active := True;
-  end
-  else
-  begin
-    Str := 'Disconnected';
-    ClientSocket1.Active := False;
+    try
+      ClientSocket1.Active := True;
+      ShowMessage('서버에 연결되었습니다.');
+    except
+      on E: Exception do
+        ShowMessage('서버 연결 실패: ' + E.Message);
+    end;
   end;
 end;
 
