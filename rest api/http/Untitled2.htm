@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+<body>
+
+<h2 align="center">회원가입
+</h2>
+      <div ms_positioning="FlowLayout">&nbsp;
+</div>
+    <p align="center"></p>
+    <p align="center"></p>
+    <p>
+      <div style="HEIGHT: 15px; WIDTH: 70px; DISPLAY: inline" ms_positioning="FlowLayout">아이디&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+
+<input id="username" placeholder="아이디"></p>
+    <p></p>
+    <p></p>
+    <p>
+      <div style="HEIGHT: 15px; WIDTH: 70px; DISPLAY: inline" ms_positioning="FlowLayout">비밀번호&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+<input id="password" type="password" placeholder="비밀번호"></p>
+    <p></p>
+    <p></p>
+    <p>이름&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="name" placeholder="이름">
+
+</p>
+    <p>이메일&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="email" placeholder="이메일">
+
+</p>
+    <p>전화번호&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="phone" placeholder="핸드폰"><br>
+
+</p>
+    <p></p>
+    <p></p>
+      <div ms_positioning="FlowLayout">
+<button onclick="signup(); location.href='/login'">
+      <div>회원가입
+</div>
+</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+function signup() {
+    const data = {
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value,
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value
+    };
+
+    fetch("http://localhost:8080/api/signup", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(json => {
+        document.getElementById("result").innerText = JSON.stringify(json);
+    });
+}
+</script>
+
+</body>
+</html>
