@@ -1,4 +1,4 @@
-﻿unit Unit1;
+unit Unit1;
 
 interface
 
@@ -567,7 +567,7 @@ procedure TForm1.SpeedButton1Click(Sender: TObject);
 var
   contents: String;
 begin
-  contents := Trim(Edit1.Text);
+  contents := Trim(RichEdit1.Text);
   if contents = '' then
   begin
     FDQueryMembers.SQL.Text := 'delete from chat_user where ChatRoomId = :roomid ';
@@ -577,11 +577,12 @@ begin
     FDQueryMembers.SQL.Text := 'delete from chat where ChatRoomId = :roomid ';
     FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
     FDQueryMembers.ExecSQL;
-    ShowMessage('delete');
+  end
+  else
+  begin
+    Form1.Close;
+    Form7.Show;
   end;
-
-  Form1.Close;
-  Form7.Show;
 end;
 
 procedure TForm1.SpeedButton3Click(Sender: TObject);
