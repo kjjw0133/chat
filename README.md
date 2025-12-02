@@ -50,6 +50,7 @@
 
 #### 오류
 + 가끔가다 로그아웃을 해도 메인 폼에 있는 Panel이 사라지지 않는 오류가 있음, 로그인을 4개를 로그아웃 로그인 했는데 ,그 상태에서 채팅방에 들어가서 채팅을 치니 일단 친 채팅의 유저 이름은 없었음, 그리고 다른 계정에서 보니까 이름이 1로 되어있음, DB에서는 userno 39와 userno,contents가 null인 데이터가 같은 시간에 1개더 추가됨, 서버에서는 누가 채팅을 했는지 표시가 안되고 있는데 DB에서는 로그아웃 전에 로그인한 계정으로 나옴
+<img width="601" height="429" alt="image" src="https://github.com/user-attachments/assets/8644a3cb-86ec-4d31-a47c-b5b5ec8aa66a" />
 <img width="737" height="38" alt="image" src="https://github.com/user-attachments/assets/3a9558f5-f2f9-4418-801a-ddca7df79a4c" />
 
 ---
