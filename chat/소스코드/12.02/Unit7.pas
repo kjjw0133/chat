@@ -85,7 +85,6 @@ begin
   Timer1.Enabled := False;
 end;
 
-// 헤더를 드래그해서 폼 이동
 procedure TForm7.PanelHeaderMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
