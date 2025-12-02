@@ -1,4 +1,4 @@
-### 설정
+### 실행 방법,설정
 1. 소스코드만 공개 된다는 가정하고 설명,델파이에서 VCL, DB는 mysql을 사용, mysql libmysql.dll파일 설치 해야지 db랑 연결
 2. db와 연결되었으면 소스코드를 전부 복사해서 Project1에 넣기, Project2를 만든 후 Server를 넣어줌
 3. 실행하기 전 Project -> options -> Application -> Froms -> Auto-create forms(Form1,2,3,4,5,6,7,8), Availabel forms(Form9,10,11)을 넣고 저장
