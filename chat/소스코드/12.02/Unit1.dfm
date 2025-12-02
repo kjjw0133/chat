@@ -110,7 +110,6 @@ object Form1: TForm1
     ScrollBars = ssVertical
     TabOrder = 1
     OnChange = RichEdit1Change
-    ExplicitWidth = 370
   end
   object PanelInput: TPanel
     Left = 0

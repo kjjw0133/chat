@@ -169,16 +169,24 @@ end;
 
 procedure TForm1.CheckAndInsertDateSeparator;
 var
-  LastDateStr,TodayStr, day: string;
+  TodayStr, day: string;
+  todayCount: Integer;
 begin
   TodayStr := FormatDateTime('yyyy-mm-dd', Now);
 
+  // 오늘 날짜 레코드가 이미 존재하는지 확인
   FDQueryMembers.Close;
-  FDQueryMembers.SQL.Text := 'select day from chating where chatRoomId = :roomid ';
+  FDQueryMembers.SQL.Text :=
+    'SELECT COUNT(*) AS cnt FROM chating ' +
+    'WHERE ChatRoomId = :roomid AND day = :today';
   FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
+  FDQueryMembers.ParamByName('today').AsString := TodayStr;
   FDQueryMembers.Open;
 
-  if FDQueryMembers.FieldByName('day').AsString = '' then
+  todayCount := FDQueryMembers.FieldByName('cnt').AsInteger;
+
+  // 오늘 날짜 레코드가 없고, 마지막 표시 날짜와 다르면 구분선 삽입
+  if (todayCount = 0) and (LastDisplayedDate <> TodayStr) then
   begin
     RichEdit1.Paragraph.Alignment := taCenter;
     RichEdit1.Paragraph.LeftIndent := 0;
@@ -188,11 +196,12 @@ begin
     RichEdit1.SelAttributes.Color := clGray;
     RichEdit1.SelAttributes.Style := [fsBold];
     RichEdit1.SelAttributes.BackColor := clWhite;
-    day := FormatDateTime('yyyy-mm-dd', Now);
+    day := TodayStr;
     RichEdit1.SelText := #13#10'─────── ' + day + ' ───────'#13#10#13#10;
 
     LastDisplayedDate := TodayStr;
 
+    // DB에 날짜 레코드 삽입
     try
       FDQueryMembers.Close;
       FDQueryMembers.SQL.Text :=
@@ -201,35 +210,7 @@ begin
       FDQueryMembers.ParamByName('day').AsWideString := day;
       FDQueryMembers.ExecSQL;
     except
-    end;
-  end;
-
-  // 마지막 표시 날짜와 오늘 날짜가 다르면 구분선 삽입
-  if LastDisplayedDate <> TodayStr then
-  begin
-    RichEdit1.Paragraph.Alignment := taCenter;
-    RichEdit1.Paragraph.LeftIndent := 0;
-    RichEdit1.Paragraph.RightIndent := 0;
-    RichEdit1.SelStart := RichEdit1.GetTextLen;
-    RichEdit1.SelAttributes.Size := 9;
-    RichEdit1.SelAttributes.Color := clGray;
-    RichEdit1.SelAttributes.Style := [fsBold];
-    RichEdit1.SelAttributes.BackColor := clWhite;
-    day := FormatDateTime('yyyy-mm-dd', Now);
-    RichEdit1.SelText := #13#10'─────── ' + day + ' ───────'#13#10#13#10;
-
-    LastDisplayedDate := TodayStr;
-
-    // DB에도 날짜 레코드 삽입
-    try
-      FDQueryMembers.Close;
-      FDQueryMembers.SQL.Text :=
-        'INSERT INTO chating (ChatRoomId, day) VALUES (:roomid, :day)';
-      FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
-      FDQueryMembers.ParamByName('day').AsWideString := day;
-      FDQueryMembers.ExecSQL;
-    except
-      // 이미 존재하면 무시
+      // 이미 존재하면 무시 (동시성 문제 대비)
     end;
   end;
 end;
