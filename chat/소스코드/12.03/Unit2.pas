@@ -95,7 +95,6 @@ begin
   ID := Trim(Edit1.Text);
   PW := Trim(Edit2.Text);
 
-  // 입력 검증
   if ID = '' then
   begin
     ShowMessage('아이디를 입력해주세요.');
