@@ -58,8 +58,6 @@
 <img width="601" height="429" alt="image" src="https://github.com/user-attachments/assets/8644a3cb-86ec-4d31-a47c-b5b5ec8aa66a" />
 <img width="737" height="38" alt="image" src="https://github.com/user-attachments/assets/3a9558f5-f2f9-4418-801a-ddca7df79a4c" />
 
-2.
-
 ---
 
 #### 구현 중
