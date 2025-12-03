@@ -17,10 +17,10 @@ readmessage int(1) comment '메시지 읽음 처리'
 );
 
 create table friend(
-request_id int primary key,
+request_id int auto_increment primary key,
 requester_id varchar(20) comment '친구 요청을 보낸 user id',
 receiver_id varchar(20) comment '친구 요청을 받은 user id',
-status int comment '친구인지 판단',
+status tinyint(1) default 0 comment '0이면 아무 것도 아님, 1: 초대를 보냄, 2: 초대 수락',
 foreign key (requester_id) references user(id),
 foreign key (receiver_id) references user(id)
 );
