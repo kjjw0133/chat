@@ -88,8 +88,6 @@ object Form13: TForm13
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 486
-    ExplicitWidth = 360
     object btnOK: TButton
       Left = 164
       Top = 0
@@ -118,6 +116,7 @@ object Form13: TForm13
       Font.Style = []
       ParentFont = False
       TabOrder = 1
+      OnClick = btnCancelClick
     end
   end
   object FDQuery1: TFDQuery

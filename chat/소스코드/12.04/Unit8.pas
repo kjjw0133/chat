@@ -27,7 +27,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
   private
-    function roomnameequal: String;
+    function roomnameequal: Boolean;
   public
     ChatType : Integer;
     chatroomname : String;
@@ -43,29 +43,44 @@ implementation
 uses
 Unit7, unit2,unit1,unit13;
 
-function TForm8.roomnameequal: String;
+function TForm8.roomnameequal: Boolean;
 var
-  roomname : String;
+  roomname: String;
 begin
-  FDQueryMembers.Close;
-  FDQueryMembers.SQL.Text := ' select chatroomname from chat where chatroomname = :chatroomname ';
-  FDQueryMembers.ParamByName('chatroomname').AsString := chatroomname;
-  FDQueryMembers.Open;
+  Result := True;  // 기본값 설정
 
-  FDQueryMembers.FieldByName('chatroomname').AsString := roomname;
+  try
+    // 데이터베이스 연결 확인
+    if not FDConnection1.Connected then
+      FDConnection1.Connected := True;
 
-  if chatroomname = roomname then
-  begin
-    ShowMessage('이미 있는 이름입니다. 다시 이름으로 변경해주세요.');
-    Exit;
+    FDQueryMembers.Close;
+    FDQueryMembers.SQL.Text := 'SELECT chatroomname FROM chat WHERE chatroomname = :chatroomname';
+    FDQueryMembers.ParamByName('chatroomname').AsString := chatroomname;
+    FDQueryMembers.Open;
+
+    // 레코드가 존재하는지 확인
+    if not FDQueryMembers.IsEmpty then
+    begin
+      roomname := FDQueryMembers.FieldByName('chatroomname').AsString;
+      if chatroomname = roomname then
+      begin
+        ShowMessage('이미 있는 이름입니다. 다시 이름으로 변경해주세요.');
+        Result := False;  // 중복 발견
+      end;
+    end;
+  except
+    on E: Exception do
+    begin
+      ShowMessage('데이터베이스 오류: ' + E.Message);
+      Result := False;
+    end;
   end;
 end;
 
 procedure TForm8.Button2Click(Sender: TObject);
-var 
-  roomname : String;
 begin
-  chatroomname := Trim(edit1.Text);
+  chatroomname := Trim(Edit1.Text);
   ChatType := 1;
 
   if chatroomname = '' then
@@ -74,20 +89,27 @@ begin
     Exit;
   end;
 
-  roomnameequal;
+  if not roomnameequal then
+    Exit;
 
-  Form13.ShowModal;
+  // Form13을 동적으로 생성
+  if not Assigned(Form13) then
+    Form13 := TForm13.Create(Application);
+
+  try
+    Form13.ShowModal;
+  finally
+    FreeAndNil(Form13);  // 사용 후 해제
+  end;
+
   Self.Hide;
-
   Edit1.Clear;
-  Exit;
 end;
 
 procedure TForm8.Button3Click(Sender: TObject);
 begin
   ChatType := 2;
-
-  chatroomname := Trim(edit1.Text);
+  chatroomname := Trim(Edit1.Text);
 
   if chatroomname = '' then
   begin
@@ -95,14 +117,21 @@ begin
     Exit;
   end;
 
-  roomnameequal;
+  if not roomnameequal then
+    Exit;
 
-  Form13.ShowModal;
+  // Form13을 동적으로 생성
+  if not Assigned(Form13) then
+    Form13 := TForm13.Create(Application);
+
+  try
+    Form13.ShowModal;
+  finally
+    FreeAndNil(Form13);  // 사용 후 해제
+  end;
+
   Self.Hide;
-
   Edit1.Clear;
-  Form8.Close;
-  Exit;
 end;
 
 procedure TForm8.FormCreate(Sender: TObject);
