@@ -65,7 +65,7 @@
 2. form13에서 create form도 아닌데 실행하면 PopulateAllFriends이 프로시저에 있는 Showmeesage가 프로그램을 시작하자 마자 출력됨, Form13을 아래 처럼 두면 방금 말한 현상이 발생하고, 오른쪽에 두면 2번쨰 사진처럼 오류 발생
    + 해결 방법
     ```
-      if not Assigned(Form13) then
+    if not Assigned(Form13) then
     Form13 := TForm13.Create(Application);
      try
        Form13.ShowModal;
@@ -73,8 +73,6 @@
        FreeAndNil(Form13);  // 사용 후 해제
      end;
     ```
-     
-
      Form13을 동적으로 호출하여 오류를 제거함
 <img width="417" height="204" alt="image" src="https://github.com/user-attachments/assets/560c96ed-b680-48f2-8831-6d21e65ee9d3" />
 <img width="344" height="145" alt="image" src="https://github.com/user-attachments/assets/e0cd8b27-1114-44c3-af30-f4c3aebbb2d1" />
