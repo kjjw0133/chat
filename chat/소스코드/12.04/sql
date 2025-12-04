@@ -33,7 +33,6 @@ CREATE INDEX idx_friend_status ON friend(status);
 CREATE INDEX idx_friend_requester ON friend(requester_id);
 CREATE INDEX idx_friend_receiver ON friend(receiver_id);
 
-
 create table chat(
 ChatRoomId int AUTO_INCREMENT primary key, /* 방 번호 */
 num int default 1/* 인원수 */,
@@ -58,6 +57,7 @@ day varchar(100)
 CREATE TABLE chat_user (
   ChatRoomId INT NOT NULL,
   UserNo INT NOT NULL,
+  joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (ChatRoomId, UserNo),
   FOREIGN KEY (ChatRoomId) REFERENCES chat(ChatRoomId),
   FOREIGN KEY (UserNo) REFERENCES user(UserNo)
