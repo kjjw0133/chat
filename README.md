@@ -67,13 +67,13 @@
     ```
       if not Assigned(Form13) then
     Form13 := TForm13.Create(Application);
-
-  try
-    Form13.ShowModal;
-  finally
-    FreeAndNil(Form13);  // 사용 후 해제
-  end;
-   ```   
+     try
+       Form13.ShowModal;
+     finally
+       FreeAndNil(Form13);  // 사용 후 해제
+     end;
+    ```
+     
 
      Form13을 동적으로 호출하여 오류를 제거함
 <img width="417" height="204" alt="image" src="https://github.com/user-attachments/assets/560c96ed-b680-48f2-8831-6d21e65ee9d3" />
