@@ -149,7 +149,7 @@ object Form7: TForm7
     ParentBackground = False
     TabOrder = 3
     object Button4: TButton
-      Left = 24
+      Left = 32
       Top = 10
       Width = 120
       Height = 40
@@ -158,7 +158,7 @@ object Form7: TForm7
       OnClick = Button4Click
     end
     object Button1: TButton
-      Left = 150
+      Left = 158
       Top = 10
       Width = 120
       Height = 40
@@ -167,7 +167,7 @@ object Form7: TForm7
       OnClick = Button1Click
     end
     object Button2: TButton
-      Left = 280
+      Left = 284
       Top = 10
       Width = 120
       Height = 40

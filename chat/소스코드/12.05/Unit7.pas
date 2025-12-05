@@ -75,17 +75,6 @@ procedure TForm7.FormCreate(Sender: TObject);
 begin
   BorderStyle := bsNone;
 
-  if not IsLoggedIn then
-  begin
-    Button2.Enabled := False;
-    Button3.Enabled := False;
-  end
-  else
-  begin
-    Button2.Enabled := True;
-    Button3.Enabled := True;
-  end;
-
   Timer1.Interval := 5000;
   Timer1.Enabled := False;
 end;
@@ -339,6 +328,20 @@ end;
 
 procedure TForm7.Button2Click(Sender: TObject);
 begin
+  FDQueryMembers.Close;
+  FDQueryMembers.SQL.Text := 'select is_logged_in from user where userno = :userno ';
+  FDQueryMembers.ParamByName('userno').AsInteger := userno;
+  FDQueryMembers.Open;
+
+  if not FDQueryMembers.FieldByName('is_logged_in').AsBoolean then
+  begin
+    if not IsLoggedIn then
+    begin
+      ShowMessage('로그인이 필요합니다.');
+      Exit;
+    end;
+  end;
+
   Application.CreateForm(TForm11, Form11);
   Form11.Show;
 end;
@@ -373,6 +376,7 @@ begin
       Edit2.Enabled   := True;
       Button6.Enabled := True;
       Button2.Enabled := True;
+      Button2.Enabled := True;
       Button3.Enabled := True;
       Button4.Caption := '로그아웃';
       LoadChat;
@@ -391,7 +395,7 @@ begin
     Edit1.Enabled   := False;
     Edit2.Enabled   := False;
     Button6.Enabled := False;
-    Button2.Enabled := False;
+    Button2.Enabled := True;
     Button3.Enabled := False;
     Button4.Caption := '2';
 
@@ -416,11 +420,15 @@ begin
       begin
         IsLoggedIn := True;
 
+        Button2.Left := 230;
+        Button4.left := 104;
         Edit1.Enabled   := True;
         Edit2.Enabled   := True;
         Button6.Enabled := True;
         Button2.Enabled := True;
         Button3.Enabled := True;
+        Button1.Visible := False;
+        Button1.Enabled := False;
         Button4.Caption := '로그아웃';
         LoadChat;
 
@@ -444,12 +452,16 @@ begin
           CurrentUser.Name := '';
           CurrentUser.Role := '';
 
+          Button2.Left := 284;
+          Button4.left := 32;
           Edit1.Enabled   := False;
           Edit1.Clear;
           Edit2.Clear;
           Edit2.Enabled   := False;
           Button3.Enabled := True;
           Button6.Enabled := True;
+          Button1.Visible := True;
+          Button1.Enabled := True;
           Button4.Caption := '로그인';
 
           ScrollBox1.DestroyComponents;
