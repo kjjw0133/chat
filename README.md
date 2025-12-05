@@ -61,6 +61,8 @@
 
 #### 오류
 1. 친구 수락,거절 버튼을 만들었는데 거절은 정상적으로 작동하는데 수락 버튼에서 Abstract Error가 발생, 데이터 베이스에 데이터는 잘 저장이 되지만 그 후에 오류가 발생한다.
+   <img width="165" height="155" alt="image" src="https://github.com/user-attachments/assets/ec41c4b3-87d8-418b-9d31-493b7667f6e4" />
+
 ---
 
 #### 오류 수정
