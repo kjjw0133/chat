@@ -95,8 +95,8 @@ object Form7: TForm7
       TextHint = #48169' '#48264#54840
     end
     object Edit1: TEdit
-      Left = 181
-      Top = 13
+      Left = 182
+      Top = 14
       Width = 120
       Height = 38
       Color = 16250871
@@ -204,7 +204,8 @@ object Form7: TForm7
       Top = 168
       Width = 42
       Height = 49
-      Caption = #45908#48372#44592'('#47560#51060' '#54168#51060#51648')'
+      Caption = #45908#48372#44592
+      OnClick = SpeedButton3Click
     end
   end
   object FDConnection1: TFDConnection
@@ -229,8 +230,8 @@ object Form7: TForm7
   end
   object Timer1: TTimer
     OnTimer = Timer1Timer
-    Left = 350
-    Top = 376
+    Left = 326
+    Top = 320
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     VendorLib = 'C:\MYPROGRAM\delphi\mysql\mysql-5.7.33-win32\lib\libmysql.dll'

@@ -51,6 +51,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure LabelCloseClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
   private
     procedure ChatPanelClick(Sender: TObject);
   public
@@ -63,7 +64,7 @@ var
 
 implementation
 
-uses unit1,unit2,unit3,unit4,unit5,unit6,unit8,unit10,unit11,unit14;
+uses unit1,unit2,unit3,unit4,unit5,unit6,unit8,unit10,unit11,unit14,unit17;
 
 {$R *.dfm}
 
@@ -121,6 +122,37 @@ begin
 
   Self.Show;
   Self.BringToFront;
+end;
+
+// Unit7.pas의 SpeedButton3Click 수정
+
+procedure TForm7.SpeedButton3Click(Sender: TObject);
+var
+  FriendRequestForm: TForm17;
+begin
+  // 로그인 체크
+  FDQueryMembers.Close;
+  FDQueryMembers.SQL.Text := 'select is_logged_in from user where userno = :userno';
+  FDQueryMembers.ParamByName('userno').AsInteger := CurrentUser.UserNo;
+  FDQueryMembers.Open;
+
+  if not FDQueryMembers.FieldByName('is_logged_in').AsBoolean then
+  begin
+    if not IsLoggedIn then
+    begin
+      ShowMessage('로그인이 필요합니다.');
+      Exit;
+    end;
+  end;
+
+  // Form17 생성 및 표시
+  FriendRequestForm := TForm17.Create(Application);
+  try
+    FriendRequestForm.Position := poScreenCenter;
+    FriendRequestForm.ShowModal;  // ✅ ShowModal 추가!
+  finally
+    FriendRequestForm.Free;
+  end;
 end;
 
 procedure TForm7.LabelCloseClick(Sender: TObject);
