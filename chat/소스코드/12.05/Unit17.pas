@@ -9,7 +9,7 @@ uses
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.UI.Intf,
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.Phys.MySQL,
-  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client;
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,System.Threading;
 
 type
   TFriendRequestInfo = record
@@ -225,55 +225,67 @@ procedure TForm17.AcceptButtonClick(Sender: TObject);
 var
   RequestID: Integer;
   Query: TFDQuery;
+  Btn: TButton;
 begin
-  RequestID := (Sender as TButton).Tag;
+  Btn := Sender as TButton;
+  RequestID := Btn.Tag;
 
   Query := TFDQuery.Create(nil);
   try
     Query.Connection := FDConnection1;
-
     Query.SQL.Text :=
       'UPDATE friend SET status = 2, created_at = now() WHERE request_id = :request_id';
     Query.ParamByName('request_id').AsInteger := RequestID;
     Query.ExecSQL;
-
-    ShowMessage('친구 요청을 수락했습니다.');
-
-    // ✅ BtnPanel.Free 제거하고 바로 LoadFriendRequests 호출
-    LoadFriendRequests;
-
   finally
     Query.Free;
   end;
+
+  // 즉시 UI를 파괴하지 말고 버튼을 비활성화해서 중복 클릭 방지
+  Btn.Enabled := False;
+
+  // 현재 이벤트가 끝난 후 안전하게 UI 갱신 수행
+  TThread.Queue(nil,
+    procedure
+    begin
+      ShowMessage('친구 요청을 수락했습니다.');
+      LoadFriendRequests;
+    end
+  );
 end;
 
 procedure TForm17.RejectButtonClick(Sender: TObject);
 var
   RequestID: Integer;
   Query: TFDQuery;
+  Btn: TButton;
 begin
-  RequestID := (Sender as TButton).Tag;
+  Btn := Sender as TButton;
+  RequestID := Btn.Tag;
 
-  if MessageDlg('친구 요청을 거절하시겠습니까?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-  begin
-    Query := TFDQuery.Create(nil);
-    try
-      Query.Connection := FDConnection1;
+  if MessageDlg('친구 요청을 거절하시겠습니까?', mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
+    Exit;
 
-      Query.SQL.Text :=
-        'UPDATE friend SET status = 0, created_at = now() WHERE request_id = :request_id';
-      Query.ParamByName('request_id').AsInteger := RequestID;
-      Query.ExecSQL;
-
-      ShowMessage('친구 요청을 거절했습니다.');
-
-      // ✅ BtnPanel.Free 제거하고 바로 LoadFriendRequests 호출
-      LoadFriendRequests;
-
-    finally
-      Query.Free;
-    end;
+  Query := TFDQuery.Create(nil);
+  try
+    Query.Connection := FDConnection1;
+    Query.SQL.Text :=
+      'UPDATE friend SET status = 0, created_at = now() WHERE request_id = :request_id';
+    Query.ParamByName('request_id').AsInteger := RequestID;
+    Query.ExecSQL;
+  finally
+    Query.Free;
   end;
+
+  Btn.Enabled := False;
+
+  TThread.Queue(nil,
+    procedure
+    begin
+      ShowMessage('친구 요청을 거절했습니다.');
+      LoadFriendRequests;
+    end
+  );
 end;
 
 end.
