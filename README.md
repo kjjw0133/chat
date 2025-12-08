@@ -1,4 +1,4 @@
-Real-time Chat Application
+Chat Application
 
 Delphi (Object Pascal) 기반의 실시간 채팅 애플리케이션
 
