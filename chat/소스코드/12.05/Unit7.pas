@@ -109,9 +109,8 @@ begin
   end;
 
   Self.Hide;
-  Application.ProcessMessages;  // Hide가 완전히 처리되도록 대기
+  Application.ProcessMessages;  
 
-  // Form14 생성 및 표시
   FriendForm := TForm14.Create(Application);
   try
     FriendForm.Position := poScreenCenter;
@@ -124,13 +123,10 @@ begin
   Self.BringToFront;
 end;
 
-// Unit7.pas의 SpeedButton3Click 수정
-
 procedure TForm7.SpeedButton3Click(Sender: TObject);
 var
   FriendRequestForm: TForm17;
 begin
-  // 로그인 체크
   FDQueryMembers.Close;
   FDQueryMembers.SQL.Text := 'select is_logged_in from user where userno = :userno';
   FDQueryMembers.ParamByName('userno').AsInteger := CurrentUser.UserNo;
@@ -145,11 +141,10 @@ begin
     end;
   end;
 
-  // Form17 생성 및 표시
   FriendRequestForm := TForm17.Create(Application);
   try
     FriendRequestForm.Position := poScreenCenter;
-    FriendRequestForm.ShowModal;  // ✅ ShowModal 추가!
+    FriendRequestForm.ShowModal; 
   finally
     FriendRequestForm.Free;
   end;
@@ -580,3 +575,4 @@ begin
 end;
 
 end.
+
