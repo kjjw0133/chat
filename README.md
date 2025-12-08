@@ -106,8 +106,6 @@ SMTP 서버 계정 (Gmail, Naver 등)
 sqlCREATE DATABASE chat_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE chat_db;
 ```
-
--- 위의 테이블 스키마 실행
 2. SMTP 설정
 Unit4.pas에서 SMTP 설정 수정:
 ```
