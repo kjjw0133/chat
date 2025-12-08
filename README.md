@@ -102,16 +102,20 @@ SMTP 서버 계정 (Gmail, Naver 등)
 
 설치 및 실행
 1. 데이터베이스 설정
+```
 sqlCREATE DATABASE chat_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE chat_db;
+```
 
 -- 위의 테이블 스키마 실행
 2. SMTP 설정
 Unit4.pas에서 SMTP 설정 수정:
+```
 pascalIdSMTP1.Host := 'smtp.gmail.com';
 IdSMTP1.Port := 587;
 IdSMTP1.Username := 'your-email@gmail.com';
 IdSMTP1.Password := 'your-app-password';
+```
 3. 서버 실행
 
 Unit12.pas (서버) 프로젝트 실행
