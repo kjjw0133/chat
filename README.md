@@ -138,26 +138,23 @@ IdSMTP1.Password := 'your-app-password';
 문제 1: SMTP 연결 오류
 증상: 이메일 인증 발송 실패
 해결책:
-
-Gmail: 2단계 인증 후 앱 비밀번호 생성
-Naver: SMTP 설정에서 POP3/IMAP 사용 허용
-방화벽에서 SMTP 포트(587, 465) 허용 확인
++ Gmail: 2단계 인증 후 앱 비밀번호 생성
++ Naver: SMTP 설정에서 POP3/IMAP 사용 허용
++ 방화벽에서 SMTP 포트(587, 465) 허용 확인
 
 문제 2: Socket 연결 실패
 증상: 클라이언트가 서버에 연결되지 않음
 해결책:
-
-서버가 먼저 실행되었는지 확인
-방화벽에서 해당 포트 허용
-로컬 테스트: localhost 또는 127.0.0.1 사용
++ 서버가 먼저 실행되었는지 확인
++ 방화벽에서 해당 포트 허용
++ 로컬 테스트: localhost 또는 127.0.0.1 사용
 
 문제 3: 한글 깨짐
 증상: 채팅 메시지의 한글이 깨짐
 해결책:
-
-Socket 전송 시 UTF-8 인코딩 사용
-MySQL 테이블 charset을 utf8mb4로 설정
-Delphi 프로젝트 인코딩 설정 확인
++ Socket 전송 시 UTF-8 인코딩 사용
++ MySQL 테이블 charset을 utf8mb4로 설정
++ Delphi 프로젝트 인코딩 설정 확인
 
 ### 향후 개발 계획
 
