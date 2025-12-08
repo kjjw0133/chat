@@ -47,10 +47,9 @@ function TForm8.roomnameequal: Boolean;
 var
   roomname: String;
 begin
-  Result := True;  // 기본값 설정
+  Result := True;  
 
   try
-    // 데이터베이스 연결 확인
     if not FDConnection1.Connected then
       FDConnection1.Connected := True;
 
@@ -59,14 +58,13 @@ begin
     FDQueryMembers.ParamByName('chatroomname').AsString := chatroomname;
     FDQueryMembers.Open;
 
-    // 레코드가 존재하는지 확인
     if not FDQueryMembers.IsEmpty then
     begin
       roomname := FDQueryMembers.FieldByName('chatroomname').AsString;
       if chatroomname = roomname then
       begin
         ShowMessage('이미 있는 이름입니다. 다시 이름으로 변경해주세요.');
-        Result := False;  // 중복 발견
+        Result := False;  
       end;
     end;
   except
@@ -92,14 +90,13 @@ begin
   if not roomnameequal then
     Exit;
 
-  // Form13을 동적으로 생성
   if not Assigned(Form13) then
     Form13 := TForm13.Create(Application);
 
   try
     Form13.ShowModal;
   finally
-    FreeAndNil(Form13);  // 사용 후 해제
+    FreeAndNil(Form13); 
   end;
 
   Self.Hide;
@@ -120,14 +117,13 @@ begin
   if not roomnameequal then
     Exit;
 
-  // Form13을 동적으로 생성
   if not Assigned(Form13) then
     Form13 := TForm13.Create(Application);
 
   try
     Form13.ShowModal;
   finally
-    FreeAndNil(Form13);  // 사용 후 해제
+    FreeAndNil(Form13);  
   end;
 
   Self.Hide;
@@ -146,5 +142,6 @@ begin
 end;
 
 end.
+
 
 
