@@ -156,7 +156,7 @@ object Form1: TForm1
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     DriverID = 'MySQL'
-    VendorLib = 'C:\MYPROGRAM\delphi\mysql\mysql-5.7.33-win32\lib\libmysql.dll'
+    VendorLib = '\libmysql.dll'
     Left = 718
     Top = 408
   end
@@ -206,4 +206,5 @@ object Form1: TForm1
     Top = 136
   end
 end
+
 
