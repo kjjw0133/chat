@@ -1,3 +1,8 @@
+### 사용 프로그램
+DB : MY SQL
+사용 언어 : DELPHI(rad studio 11)
+
+---
 
 ### chat 
 1. 로그인 중복 방지 처리
