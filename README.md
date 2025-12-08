@@ -2,16 +2,17 @@ Chat Application
 
 Delphi (Object Pascal) 기반의 실시간 채팅 애플리케이션
 
-프로젝트 소개
+### 프로젝트 소개
 Delphi의 Socket 통신을 활용한 실시간 채팅 프로그램입니다. 회원가입, 로그인, 친구 관리, 채팅방 생성 및 실시간 메시지 송수신 기능을 제공합니다.
-개발 목적
+
+### 개발 목적
 
 Socket 프로그래밍을 통한 실시간 통신 구현
 FireDAC을 이용한 데이터베이스 연동
 SMTP를 활용한 이메일 인증 시스템 구현
 보안 강화를 위한 비밀번호 암호화(SHA + Salt)
 
-기술 스택
+### 기술 스택
 Frontend
 
 Delphi VCL - GUI 프레임워크
@@ -31,7 +32,7 @@ Security
 SHA Hash - 비밀번호 암호화
 Salt - 레인보우 테이블 공격 방지
 
-프로젝트 구조
+### 프로젝트 구조
 ```
 chat/
 ├── Unit1.pas          # 채팅창
@@ -51,7 +52,7 @@ chat/
 ├── Unit16.pas         # 친구 요청
 └── Unit17.pas         # 친구 요청 확인/거절
 ```
-🗄️ 데이터베이스 스키마
+### 데이터베이스 스키마
 ```
 Users 테이블
 sqlCREATE TABLE users (
@@ -93,7 +94,7 @@ sqlCREATE TABLE friends (
     FOREIGN KEY (friend_id) REFERENCES users(id)
 );
 ```
-사전 요구사항
+### 사전 요구사항
 
 Delphi IDE (10.2 Tokyo 이상)
 MySQL Server 8.0 이상
@@ -135,7 +136,7 @@ Socket 기반 즉각적인 메시지 전송
 다중 클라이언트 동시 접속 지원
 채팅방별 메시지 브로드캐스트
 
-🔧 트러블슈팅
+### 트러블슈팅
 문제 1: SMTP 연결 오류
 증상: 이메일 인증 발송 실패
 해결책:
@@ -160,7 +161,7 @@ Socket 전송 시 UTF-8 인코딩 사용
 MySQL 테이블 charset을 utf8mb4로 설정
 Delphi 프로젝트 인코딩 설정 확인
 
-향후 개발 계획
+### 향후 개발 계획
 
  파일/이미지 전송 기능
  읽음 표시 (Read Receipt)
@@ -171,15 +172,14 @@ Delphi 프로젝트 인코딩 설정 확인
  이모티콘/스티커
  메시지 암호화 (E2E Encryption)
 
-배운 점 & 개선 사항
-배운 점
+### 배운 점
 
 Socket 프로그래밍을 통한 실시간 통신 구현
 보안을 고려한 사용자 인증 시스템 설계
 SMTP를 활용한 이메일 인증 구현
 복잡한 GUI 애플리케이션 구조 설계
 
-개선이 필요한 부분
+### 개선이 필요한 부분
 
 프로토콜 정의: 체계적인 메시지 프로토콜 설계 필요
 에러 처리: 네트워크 끊김 등 예외 상황 처리 강화
