@@ -53,7 +53,6 @@ const
     'q','r','s','t','u','v','w','x','y','z'
   );
 var
-//  ID, EMAIL,
   PW, RandChar,hashedInput: String;
   I, R: Integer;
   Msg: TIdMessage;
@@ -164,3 +163,4 @@ begin
 end;
 
 end.
+
