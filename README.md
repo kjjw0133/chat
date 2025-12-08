@@ -13,24 +13,20 @@ Delphi (Object Pascal) 기반의 실시간 채팅 애플리케이션
 + 보안 강화를 위한 비밀번호 암호화(SHA + Salt)
 
 ### 기술 스택
-Frontend
++ Frontend
+    + Delphi VCL - GUI 프레임워크
 
-Delphi VCL - GUI 프레임워크
++ Backend
+    + ServerSocket/ClientSocket - TCP/IP 소켓 통신
+    + FireDAC - 데이터베이스 액세스
+    + Indy SMTP - 이메일 인증 발송
 
-Backend
++ Database
+    + MySQL - 사용자, 채팅방, 메시지 데이터 관리
 
-ServerSocket/ClientSocket - TCP/IP 소켓 통신
-FireDAC - 데이터베이스 액세스
-Indy SMTP - 이메일 인증 발송
-
-Database
-
-MySQL - 사용자, 채팅방, 메시지 데이터 관리
-
-Security
-
-SHA Hash - 비밀번호 암호화
-Salt - 레인보우 테이블 공격 방지
++ Security
+    + SHA Hash - 비밀번호 암호화
+    + Salt - 레인보우 테이블 공격 방지
 
 ### 프로젝트 구조
 ```
@@ -96,9 +92,9 @@ sqlCREATE TABLE friends (
 ```
 ### 사전 요구사항
 
-Delphi IDE (10.2 Tokyo 이상)
-MySQL Server 8.0 이상
-SMTP 서버 계정 (Gmail, Naver 등)
++ Delphi IDE (10.2 Tokyo 이상)
++ MySQL Server 8.0 이상
++ SMTP 서버 계정 (Gmail, Naver 등)
 
 설치 및 실행
 1. 데이터베이스 설정
@@ -107,7 +103,7 @@ sqlCREATE DATABASE chat_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE chat_db;
 ```
 2. SMTP 설정
-Unit4.pas에서 SMTP 설정 수정:
++ Unit4.pas에서 SMTP 설정 수정:
 ```
 pascalIdSMTP1.Host := 'smtp.gmail.com';
 IdSMTP1.Port := 587;
@@ -116,27 +112,27 @@ IdSMTP1.Password := 'your-app-password';
 ```
 3. 서버 실행
 
-Unit12.pas (서버) 프로젝트 실행
-포트 설정 및 서버 시작
++ Unit12.pas (서버) 프로젝트 실행
++ 포트 설정 및 서버 시작
 
 4. 클라이언트 실행
 
-채팅 클라이언트 실행
-서버 주소 입력 (localhost 또는 서버 IP)
-회원가입 또는 로그인
++ 채팅 클라이언트 실행
++ 서버 주소 입력 (localhost 또는 서버 IP)
++ 회원가입 또는 로그인
 
-사용자 경험
++ 사용자 경험
 
-직관적인 UI (본인/상대방 메시지 구분)
-친구 검색 기능으로 빠른 접근
-입장/퇴장 알림으로 실시간 상태 파악
-메인 화면에서 채팅방 바로 입장
+    + 직관적인 UI (본인/상대방 메시지 구분)
+    + 친구 검색 기능으로 빠른 접근
+    + 입장/퇴장 알림으로 실시간 상태 파악
+    + 메인 화면에서 채팅방 바로 입장
 
-실시간 통신
++ 실시간 통신
 
-Socket 기반 즉각적인 메시지 전송
-다중 클라이언트 동시 접속 지원
-채팅방별 메시지 브로드캐스트
+    + Socket 기반 즉각적인 메시지 전송
+    + 다중 클라이언트 동시 접속 지원
+    + 채팅방별 메시지 브로드캐스트
 
 ### 트러블슈팅
 문제 1: SMTP 연결 오류
