@@ -10,15 +10,15 @@ uses
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Phys.MySQLDef, FireDAC.UI.Intf,
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.Phys.MySQL,
   FireDAC.VCLUI.Wait, Data.FMTBcd, Data.SqlExpr, Data.DB, FireDAC.Comp.Client,
-  FireDAC.Comp.DataSet, System.Hash; // <-- ÇØ½Ã À¯´Ö Ãß°¡
+  FireDAC.Comp.DataSet, System.Hash; 
 
 type
   TForm2 = class(TForm)
     Label1: TLabel;
     Label3: TLabel;
-    Edit1: TEdit; // ID
-    Edit2: TEdit; // PW (ºñ¹Ð¹øÈ£)
-    Button1: TButton; // ·Î±×ÀÎ ¹öÆ°
+    Edit1: TEdit; 
+    Edit2: TEdit; 
+    Button1: TButton; 
     PanelTop: TPanel;
     LabelClose: TLabel;
     FDQueryMembers: TFDQuery;
@@ -33,7 +33,7 @@ type
     procedure Label2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Label4Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject); // Æû »ý¼º ÀÌº¥Æ® Ãß°¡
+    procedure Button2Click(Sender: TObject); 
   private
     { Private declarations }
   public
@@ -45,7 +45,7 @@ type
     UserNo: Integer;
     ID: string;
     Name: string;
-    Role: string; // ¿¹: 'admin', 'user'
+    Role: string; 
   end;
 
 var
@@ -59,7 +59,7 @@ uses Unit3, Unit1, Unit4, Unit7;
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
-  BorderStyle := bsNone;  // ·±Å¸ÀÓ¿¡ Å×µÎ¸® Á¦°Å
+  BorderStyle := bsNone; 
   Edit2.PasswordChar := '*';
 end;
 
@@ -97,17 +97,16 @@ begin
 
   if ID = '' then
   begin
-    ShowMessage('¾ÆÀÌµð¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.');
+    ShowMessage('ì•„ì´ë””ë¥¼ ìž…ë ¥í•´ì£¼ì„¸ìš”.');
     Exit;
   end;
   if PW = '' then
   begin
-    ShowMessage('ºñ¹Ð¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.');
+    ShowMessage('ë¹„ë°€ë²ˆí˜¸ë¥¼ ìž…ë ¥í•´ì£¼ì„¸ìš”.');
     Exit;
   end;
 
   try
-    // 1. DB¿¡¼­ ÇØ´ç IDÀÇ Salt °ªÀ» ¸ÕÀú °¡Á®¿È
     FDQueryMembers.Close;
     FDQueryMembers.SQL.Text := 'SELECT salt FROM user WHERE id = :id';
     FDQueryMembers.ParamByName('id').AsString := ID;
@@ -115,15 +114,13 @@ begin
 
     if FDQueryMembers.IsEmpty then
     begin
-      ShowMessage('¾ÆÀÌµð ¶Ç´Â ºñ¹Ð¹øÈ£°¡ Àß¸øµÇ¾ú½À´Ï´Ù.');
+      ShowMessage('ì•„ì´ë”” ë˜ëŠ” ë¹„ë°€ë²ˆí˜¸ê°€ ìž˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.');
       Exit;
     end;
 
-    // 2. °¡Á®¿Â Salt·Î ÀÔ·ÂÇÑ ºñ¹Ð¹øÈ£¸¦ ÇØ½Ã
     Salt := FDQueryMembers.FieldByName('salt').AsString;
     hashedInput := THashSHA2.GetHashString(PW + Salt);
 
-    // 3. ÇØ½ÃµÈ ºñ¹Ð¹øÈ£·Î ·Î±×ÀÎ ½Ãµµ
     FDQueryMembers.Close;
     FDQueryMembers.SQL.Text :=
       'SELECT userno, id, name, role FROM user WHERE id = :id AND pw = :pw';
@@ -139,7 +136,6 @@ begin
       CurrentUser.UserNo := FDQueryMembers.FieldByName('userno').AsInteger;
       IsLoggedIn := True;
 
-      // Áßº¹ ·Î±×ÀÎ Ã¼Å©
       FDQueryMembers.Close;
       FDQueryMembers.SQL.Text := 'SELECT is_logged_in FROM user WHERE userno = :userno';
       FDQueryMembers.ParamByName('userno').AsInteger := CurrentUser.UserNo;
@@ -147,7 +143,7 @@ begin
 
       if FDQueryMembers.FieldByName('is_logged_in').AsBoolean then
       begin
-        ShowMessage('ÀÌ¹Ì ·Î±×ÀÎÇÑ °èÁ¤ÀÔ´Ï´Ù.');
+        ShowMessage('ì´ë¯¸ ë¡œê·¸ì¸í•œ ê³„ì •ìž…ë‹ˆë‹¤.');
         Exit;
       end
       else
@@ -164,7 +160,7 @@ begin
       ModalResult := mrOk;
     end
     else
-      ShowMessage('¾ÆÀÌµð ¶Ç´Â ºñ¹Ð¹øÈ£°¡ Àß¸øµÇ¾ú½À´Ï´Ù.');
+      ShowMessage('ì•„ì´ë”” ë˜ëŠ” ë¹„ë°€ë²ˆí˜¸ê°€ ìž˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.');
   finally
     FDQueryMembers.Close;
   end;
@@ -183,4 +179,5 @@ begin
 end;
 
 end.
+
 
