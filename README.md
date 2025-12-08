@@ -1,6 +1,15 @@
-### 사용 프로그램
-DB : MY SQL
-사용 언어 : DELPHI(rad studio 11)
+Chat
+
+> Delphi (Object Pascal) 기반의 채팅 프로그램
+
+## 프로젝트 소개
+
+Delphi의 ServerSocket,ClientSocket 컴포넌트를 활용하여 구현한 실시간 채팅 프로그램입니다.
+
+### 개발 목적
+- FireDAC을 이용한 데이터베이스 연동 구현
+- Socket을 사용한 실시간 데이터 통신
+- SMTP를 활용한 비밀번호 이메일 인증 구현
 
 ---
 
