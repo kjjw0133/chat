@@ -32,6 +32,7 @@ SHA Hash - 비밀번호 암호화
 Salt - 레인보우 테이블 공격 방지
 
 프로젝트 구조
+```
 chat/
 ├── Unit1.pas          # 채팅창
 ├── Unit2.pas          # 로그인
@@ -49,9 +50,9 @@ chat/
 ├── Unit14.pas         # 친구 목록
 ├── Unit16.pas         # 친구 요청
 └── Unit17.pas         # 친구 요청 확인/거절
-
+```
 🗄️ 데이터베이스 스키마
-
+```
 Users 테이블
 sqlCREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -91,6 +92,7 @@ sqlCREATE TABLE friends (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (friend_id) REFERENCES users(id)
 );
+```
 시작하기
 사전 요구사항
 
