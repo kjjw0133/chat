@@ -93,7 +93,6 @@ sqlCREATE TABLE friends (
     FOREIGN KEY (friend_id) REFERENCES users(id)
 );
 ```
-시작하기
 사전 요구사항
 
 Delphi IDE (10.2 Tokyo 이상)
