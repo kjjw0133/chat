@@ -178,10 +178,10 @@ object Form1: TForm1
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Server=localhost'
-      'Database=chating app'
-      'User_Name=root'
-      'Password=1234'
+      'Server='
+      'Database='
+      'User_Name='
+      'Password='
       'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Connected = True
@@ -191,7 +191,7 @@ object Form1: TForm1
   end
   object ClientSocket1: TClientSocket
     Active = False
-    Address = '127.0.0.1'
+    Address = ''
     ClientType = ctNonBlocking
     Port = 8080
     OnConnect = ClientSocket1Connect
@@ -206,3 +206,4 @@ object Form1: TForm1
     Top = 136
   end
 end
+
