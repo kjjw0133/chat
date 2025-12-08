@@ -81,7 +81,6 @@ begin
     UserLabel.Font.Size := 11;
     UserLabel.Font.Color := clBlack;
 
-    // 현재 로그인한 유저 강조
     if Trim(UserArray[I]) = CurrentUser.Name then
     begin
       UserLabel.Caption := Trim(UserArray[I]) + ' (나)';
@@ -135,3 +134,4 @@ begin
 end;
 
 end.
+
