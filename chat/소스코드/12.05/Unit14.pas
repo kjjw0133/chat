@@ -87,7 +87,7 @@ begin
   end
   else
   begin
-    ShowMessage('Ä£±¸ ¸ñ·ÏÀ» ºÒ·¯¿Ã ¼ö ¾ø½À´Ï´Ù.');
+    ShowMessage('ì¹œêµ¬ ëª©ë¡ì„ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.');
   end;
 end;
 
@@ -119,7 +119,7 @@ begin
       lbFriends.Items.Add(Friend.UserName);
     end;
 
-    userCountLabel.Caption := 'Ä£±¸ ' + IntToStr(FFilteredFriends.Count) + '¸í';
+    userCountLabel.Caption := 'ì¹œêµ¬ ' + IntToStr(FFilteredFriends.Count) + 'ëª…';
   finally
     lbFriends.Items.EndUpdate;
   end;
