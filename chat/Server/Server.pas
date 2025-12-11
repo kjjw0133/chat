@@ -93,6 +93,7 @@ begin
   NowStr := FormatDateTime('t', Now);
   RecvStr := Socket.ReceiveText;
 
+  // JOIN:: 메시지 처리
   if RecvStr.StartsWith('JOIN::') then
   begin
     parts := RecvStr.Split(['::']);
@@ -121,6 +122,7 @@ begin
     Exit;
   end
 
+  // JOIN_MSG:: 입장 메시지 처리
   else if RecvStr.StartsWith('JOIN_MSG::') then
   begin
     parts := RecvStr.Split(['::']);
@@ -138,14 +140,14 @@ begin
       RichEdit1.SelText := Format('[입장] %s님이 방 %s에 입장했습니다. [%s]',
         [sUser, sRoomID, NowStr]) + sLineBreak;
 
-      // 같은 방의 모든 클라이언트에게 메시지 (본인 제외)
+      // 같은 방의 모든 클라이언트에게 브로드캐스트 (본인 제외)
       SendStr := Format('JOIN_MSG::%s::%s', [sRoomID, sUser]);
 
       for i := 0 to ServerSocket1.Socket.ActiveConnections - 1 do
       begin
         conSock := ServerSocket1.Socket.Connections[i];
         if conSock = Socket then
-          Continue; // 본인 제외
+          Continue; // 보낸 본인 제외
 
         if Assigned(conSock.Data) then
         begin
@@ -163,7 +165,8 @@ begin
     Exit;
   end
 
-  else if RecvStr.StartsWith('LEAVE::') then // 퇴장 메시지 
+  // LEAVE:: 퇴장 메시지 처리
+  else if RecvStr.StartsWith('LEAVE::') then
   begin
     parts := RecvStr.Split(['::']);
     if Length(parts) >= 3 then
@@ -171,7 +174,8 @@ begin
       sRoomID := parts[1];
       sUser := parts[2];
       roomID := StrToIntDef(sRoomID, -1);
-      
+
+      // 서버 로그
       RichEdit1.Paragraph.Alignment := taLeftJustify;
       RichEdit1.SelStart := RichEdit1.GetTextLen;
       RichEdit1.SelAttributes.Size := 9;
@@ -179,11 +183,13 @@ begin
       RichEdit1.SelText := Format('[퇴장] %s님이 방 %s에서 퇴장했습니다. [%s]',
         [sUser, sRoomID, NowStr]) + sLineBreak;
 
+      // 같은 방의 모든 클라이언트에게 브로드캐스트
       SendStr := Format('LEAVE::%s::%s', [sRoomID, sUser]);
 
       for i := 0 to ServerSocket1.Socket.ActiveConnections - 1 do
       begin
         conSock := ServerSocket1.Socket.Connections[i];
+        // 퇴장 메시지는 본인도 받을 수 있도록 제외하지 않음
 
         if Assigned(conSock.Data) then
         begin
@@ -201,6 +207,7 @@ begin
     Exit;
   end
 
+  // MSG:: 일반 채팅 메시지 처리
   else if RecvStr.StartsWith('MSG::') then
   begin
     parts := RecvStr.Split(['::']);
@@ -211,6 +218,7 @@ begin
       sBody := String.Join('::', Copy(parts, 3, Length(parts) - 3));
       roomID := StrToIntDef(sRoomID, -1);
 
+      // 서버 화면에 로그
       RichEdit1.Paragraph.Alignment := taLeftJustify;
       RichEdit1.SelStart := RichEdit1.GetTextLen;
       RichEdit1.SelAttributes.Size := 9;
@@ -219,13 +227,15 @@ begin
       RichEdit1.SelAttributes.Size := 10;
       RichEdit1.SelText := sBody + ' [' + NowStr + ']' + sLineBreak;
 
+      // 클라이언트가 기대하는 MSG:: 형식으로 전송
       SendStr := Format('MSG::%s::%s::%s', [sRoomID, sUser, sBody]);
 
+      // 같은 roomID의 다른 클라이언트들에게 브로드캐스트
       for i := 0 to ServerSocket1.Socket.ActiveConnections - 1 do
       begin
         conSock := ServerSocket1.Socket.Connections[i];
         if conSock = Socket then
-          Continue; 
+          Continue; // 보낸 본인 제외
 
         if Assigned(conSock.Data) then
         begin
@@ -245,7 +255,6 @@ begin
 end;
 
 end.
-
 
 
 
