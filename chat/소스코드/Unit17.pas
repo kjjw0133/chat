@@ -241,10 +241,9 @@ begin
     Query.Free;
   end;
 
-  // 즉시 UI를 파괴하지 말고 버튼을 비활성화해서 중복 클릭 방지
+  //  버튼을 비활성화
   Btn.Enabled := False;
 
-  // 현재 이벤트가 끝난 후 안전하게 UI 갱신 수행
   TThread.Queue(nil,
     procedure
     begin
@@ -289,3 +288,4 @@ begin
 end;
 
 end.
+
