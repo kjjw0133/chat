@@ -54,7 +54,7 @@ begin
 
   if FDQuery1.IsEmpty then
   begin
-    ShowMessage('ÇØ´ç »ç¿ëÀÚ°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.');
+    ShowMessage('í•´ë‹¹ ì‚¬ìš©ìê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.');
     Exit;
   end;
 
@@ -71,7 +71,7 @@ begin
 
    if not FDQuery1.IsEmpty then
    begin
-    ShowMessage('ÀÌ¹Ì ÃÊ´ëÇÏ°Å³ª Ä£±¸ »óÅÂÀÔ´Ï´Ù.');
+    ShowMessage('ì´ë¯¸ ì´ˆëŒ€í•˜ê±°ë‚˜ ì¹œêµ¬ ìƒíƒœì…ë‹ˆë‹¤.');
     Exit;
    end;
 
@@ -85,7 +85,7 @@ begin
   FDQuery1.ParamByName('requester_id').AsWideString := requester_id;
   FDQuery1.ParamByName('receiver_id').AsWideString := receiver_id;
   FDQuery1.ExecSQL;
-  ShowMessage('Ä£±¸ Ãß°¡ ¿äÃ»ÀÌ ¼º°øÀûÀ¸·Î ¿Ï·áµÇ¾ú½À´Ï´Ù.');
+  ShowMessage('ì¹œêµ¬ ì¶”ê°€ ìš”ì²­ì´ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.');
   Form16.Close;
 
   TForm14.Create(Application);
@@ -132,46 +132,39 @@ begin
   FDQuery1.First;
   while not FDQuery1.Eof do
   begin
-    // Panel »ı¼º
-    panel := TPanel.Create(ScrollBox1);   // Owner·Î ScrollBox1À» Áà¼­ ÀÚµ¿ ÇØÁ¦
+    panel := TPanel.Create(ScrollBox1);  
     panel.Parent := ScrollBox1;
     panel.Align := alTop;
     panel.Height := 60;
     panel.Caption := '';
     panel.Top := VerticalOffset;
-    panel.Tag := FDQuery1.FieldByName('recommended_userno').AsInteger; // Å¬¸¯ ½Ã »ç¿ëÇÒ ID
-    panel.OnClick := PanelRecommendClick; // ÀÌº¥Æ® ¿¬°á
+    panel.Tag := FDQuery1.FieldByName('recommended_userno').AsInteger; 
+    panel.OnClick := PanelRecommendClick; 
 
-    // usernoLabel
     usernoLabel := TLabel.Create(panel);
     usernoLabel.Parent := panel;
     usernoLabel.Left := 8;
     usernoLabel.Top := 8;
     usernoLabel.Caption := IntToStr(FDQuery1.FieldByName('recommended_userno').AsInteger);
 
-    // usernameLabel
     usernameLabel := TLabel.Create(panel);
     usernameLabel.Parent := panel;
     usernameLabel.Left := 80;
     usernameLabel.Top := 8;
     usernameLabel.Caption := FDQuery1.FieldByName('recommended_username').AsString;
 
-    // useridLabel
     useridLabel := TLabel.Create(panel);
     useridLabel.Parent := panel;
     useridLabel.Left := 80;
     useridLabel.Top := 30;
     useridLabel.Caption := FDQuery1.FieldByName('recommended_userid').AsString;
 
-    // ´ÙÀ½ ·¹ÄÚµå·Î
     FDQuery1.Next;
     VerticalOffset := VerticalOffset + panel.Height + 4;
   end;
 
-  // ÇÊ¿ä ½Ã FDQuery1.Close; // ¶Ç´Â À¯Áö
 end;
 
-// Å¬¸¯ ÀÌº¥Æ® ¿¹½Ã (Æû¿¡ ¾Æ·¡ ¸Ş¼­µå¸¦ Ãß°¡)
 procedure TForm16.PanelRecommendClick(Sender: TObject);
 var
   pnl: TPanel;
@@ -180,12 +173,12 @@ begin
   if Sender is TPanel then
   begin
     pnl := TPanel(Sender);
-    recommendedUserNo := pnl.Tag; // ¿ì¸®°¡ ÀúÀåÇØµĞ UserNo
-    // ¿©±â¿¡ Ä£±¸Ãß°¡ ·ÎÁ÷ ÀÛ¼º (¿¹: Ä£±¸ ¿äÃ» ´ÙÀÌ¾ó·Î±×, DB insert µî)
-    ShowMessage('ÃßÃµ »ç¿ëÀÚ¸¦ Ãß°¡ÇÕ´Ï´Ù. UserNo = ' + IntToStr(recommendedUserNo));
+    recommendedUserNo := pnl.Tag; 
+    ShowMessage('ì¶”ì²œ ì‚¬ìš©ìë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤. UserNo = ' + IntToStr(recommendedUserNo));
   end;
 end;
 
 
 end.
+
 
