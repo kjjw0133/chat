@@ -107,12 +107,13 @@ object Form4: TForm4
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Server=localhost'
-      'Database=chating app'
-      'User_Name=root'
-      'Password=1234'
+      'Database= '
+      'User_Name='
+      'Password='
       'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Left = 616
     Top = 400
   end
 end
+
