@@ -149,7 +149,7 @@ object Form14: TForm14
     TabOrder = 4
   end
   object Button1: TButton
-    Left = 300
+    Left = 309
     Top = 12
     Width = 75
     Height = 25
@@ -160,9 +160,9 @@ object Form14: TForm14
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Server=localhost'
-      'Database= '
-      'User_Name='
-      'Password='
+      'Database=chating app'
+      'User_Name=root'
+      'Password=1234'
       'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Connected = True
@@ -182,9 +182,8 @@ object Form14: TForm14
     Top = 376
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    VendorLib = 'libmysql.dll'
+    VendorLib = 'C:\MYPROGRAM\delphi\mysql\mysql-5.7.33-win32\lib\libmysql.dll'
     Left = 208
     Top = 352
   end
 end
-

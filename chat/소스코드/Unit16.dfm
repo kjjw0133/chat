@@ -2,8 +2,8 @@ object Form16: TForm16
   Left = 0
   Top = 0
   Caption = 'Form16'
-  ClientHeight = 560
-  ClientWidth = 537
+  ClientHeight = 563
+  ClientWidth = 542
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -30,12 +30,12 @@ object Form16: TForm16
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 537
-    Height = 560
+    Width = 542
+    Height = 563
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 232
-    ExplicitHeight = 329
+    ExplicitWidth = 537
+    ExplicitHeight = 560
     object Label2: TLabel
       Left = 0
       Top = 111
@@ -93,12 +93,12 @@ object Form16: TForm16
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Server='
-      'Database= '
-      'User_Name='
-      'Password='
-      'CharacterSet='
-      'DriverID=')
+      'Server=localhost'
+      'Database=chating app'
+      'User_Name=root'
+      'Password=1234'
+      'CharacterSet=utf8mb4'
+      'DriverID=MySQL')
     Connected = True
     LoginPrompt = False
     Left = 152
@@ -112,9 +112,8 @@ object Form16: TForm16
     Top = 469
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    VendorLib = '\libmysql.dll'
+    VendorLib = 'C:\MYPROGRAM\delphi\mysql\mysql-5.7.33-win32\lib\libmysql.dll'
     Left = 28
     Top = 509
   end
 end
-

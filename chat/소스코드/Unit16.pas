@@ -27,7 +27,8 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
   private
-   procedure PanelRecommendClick(Sender: TObject);
+   procedure AcceptButtonClick(Sender: TObject);
+   procedure RejectButtonClick(Sender: TObject);
   public
     { Public declarations }
   end;
@@ -54,7 +55,7 @@ begin
 
   if FDQuery1.IsEmpty then
   begin
-    ShowMessage('í•´ë‹¹ ì‚¬ìš©ìê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.');
+    ShowMessage('ÇØ´ç »ç¿ëÀÚ°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.');
     Exit;
   end;
 
@@ -71,7 +72,7 @@ begin
 
    if not FDQuery1.IsEmpty then
    begin
-    ShowMessage('ì´ë¯¸ ì´ˆëŒ€í•˜ê±°ë‚˜ ì¹œêµ¬ ìƒíƒœì…ë‹ˆë‹¤.');
+    ShowMessage('ÀÌ¹Ì ÃÊ´ëÇÏ°Å³ª Ä£±¸ »óÅÂÀÔ´Ï´Ù.');
     Exit;
    end;
 
@@ -85,7 +86,7 @@ begin
   FDQuery1.ParamByName('requester_id').AsWideString := requester_id;
   FDQuery1.ParamByName('receiver_id').AsWideString := receiver_id;
   FDQuery1.ExecSQL;
-  ShowMessage('ì¹œêµ¬ ì¶”ê°€ ìš”ì²­ì´ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.');
+  ShowMessage('Ä£±¸ Ãß°¡ ¿äÃ»ÀÌ ¼º°øÀûÀ¸·Î ¿Ï·áµÇ¾ú½À´Ï´Ù.');
   Form16.Close;
 
   TForm14.Create(Application);
@@ -105,6 +106,7 @@ var
   panel: TPanel;
   myno: Integer;
   usernoLabel, usernameLabel, useridLabel: TLabel;
+  AcceptBtn, RejectBtn: TButton;
   VerticalOffset: Integer;
 begin
   myno := CurrentUser.UserNo;
@@ -132,14 +134,14 @@ begin
   FDQuery1.First;
   while not FDQuery1.Eof do
   begin
-    panel := TPanel.Create(ScrollBox1);  
+    panel := TPanel.Create(ScrollBox1);
     panel.Parent := ScrollBox1;
     panel.Align := alTop;
     panel.Height := 60;
     panel.Caption := '';
     panel.Top := VerticalOffset;
-    panel.Tag := FDQuery1.FieldByName('recommended_userno').AsInteger; 
-    panel.OnClick := PanelRecommendClick; 
+    panel.Tag := FDQuery1.FieldByName('recommended_userno').AsInteger;
+//    panel.OnClick := PanelRecommendClick;
 
     usernoLabel := TLabel.Create(panel);
     usernoLabel.Parent := panel;
@@ -159,26 +161,91 @@ begin
     useridLabel.Top := 30;
     useridLabel.Caption := FDQuery1.FieldByName('recommended_userid').AsString;
 
+     AcceptBtn := TButton.Create(Panel);
+      AcceptBtn.Parent := Panel;
+      AcceptBtn.Left := Panel.Width - 180;
+      AcceptBtn.Top := 20;
+      AcceptBtn.Width := 70;
+      AcceptBtn.Height := 30;
+      AcceptBtn.Caption := 'Ä£±¸ Ãß°¡';
+      AcceptBtn.Font.Name := 'Malgun Gothic';
+      AcceptBtn.Font.Size := 9;
+      AcceptBtn.Anchors := [akTop, akRight];
+      AcceptBtn.Tag :=  FDQuery1.FieldByName('recommended_userno').AsInteger;
+      AcceptBtn.OnClick := AcceptButtonClick;
+
+      RejectBtn := TButton.Create(Panel);
+      RejectBtn.Parent := Panel;
+      RejectBtn.Left := Panel.Width - 100;
+      RejectBtn.Top := 20;
+      RejectBtn.Width := 70;
+      RejectBtn.Height := 30;
+      RejectBtn.Caption := 'x';
+      RejectBtn.Font.Name := 'Malgun Gothic';
+      RejectBtn.Font.Size := 9;
+      RejectBtn.Anchors := [akTop, akRight];
+      RejectBtn.Tag := FDQuery1.FieldByName('recommended_userno').AsInteger;
+      RejectBtn.OnClick := RejectButtonClick;
+
     FDQuery1.Next;
     VerticalOffset := VerticalOffset + panel.Height + 4;
   end;
 
+  FDQuery1.Close;
 end;
 
-procedure TForm16.PanelRecommendClick(Sender: TObject);
+procedure TForm16.AcceptButtonClick(Sender: TObject);
 var
-  pnl: TPanel;
-  recommendedUserNo: Integer;
+  selectedUserNo: Integer;
+  requester_id, receiver_id: String;
 begin
-  if Sender is TPanel then
+  if Sender is TButton then
   begin
-    pnl := TPanel(Sender);
-    recommendedUserNo := pnl.Tag; 
-    ShowMessage('ì¶”ì²œ ì‚¬ìš©ìë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤. UserNo = ' + IntToStr(recommendedUserNo));
+    selectedUserNo := TButton(Sender).Tag;
+    requester_id := CurrentUser.ID;
+
+    // FDQuery1À» Àç»ç¿ë (ÀÌ¹Ì Æû¿¡ »ı¼ºµÊ)
+    FDQuery1.Close;
+    FDQuery1.SQL.Text := 'SELECT id FROM `user` WHERE userno = :userno';
+    FDQuery1.ParamByName('userno').AsInteger := selectedUserNo;
+    FDQuery1.Open;
+
+    if not FDQuery1.IsEmpty then
+    begin
+      receiver_id := FDQuery1.FieldByName('id').AsWideString;
+
+      FDQuery1.Close;
+      FDQuery1.SQL.Text := 'INSERT INTO friend (requester_id, receiver_id, status) VALUES (:requester_id, :receiver_id, 1)';
+      FDQuery1.ParamByName('requester_id').AsWideString := requester_id;
+      FDQuery1.ParamByName('receiver_id').AsWideString := receiver_id;
+      FDQuery1.ExecSQL;
+
+      ShowMessage('Ä£±¸ Ãß°¡ ¿äÃ»ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.');
+
+      // Ãß°¡µÈ ÆĞ³Î Á¦°Å
+      if Sender is TButton then
+        TButton(Sender).Parent.Free;
+    end
+    else
+    begin
+      ShowMessage('»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.');
+    end;
+
+    FDQuery1.Close;
   end;
 end;
 
+procedure TForm16.RejectButtonClick(Sender: TObject);
+var
+  selectedUserNo : Integer;
+begin
+  if Sender is TButton then
+  begin
+    selectedUserNo := TButton(Sender).Tag;
+
+    TButton(Sender).Parent.Free;
+  end;
+end;
 
 end.
-
 
