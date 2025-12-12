@@ -22,7 +22,7 @@ Delphi (Object Pascal) 기반의 실시간 채팅 애플리케이션
     + Indy SMTP - 이메일 인증 발송
 
 + Database
-    + MySQL - 사용자, 채팅, 메시지 데이터 관리
+    + MySQL - 사용자, 미팅, 메시지 데이터 관리
 
 + Security
     + SHA Hash - 비밀번호 암호화
