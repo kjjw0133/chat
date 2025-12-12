@@ -126,7 +126,7 @@ begin
     // ---- 말풍선 메시지 ----
     RichEdit1.SelAttributes.Size := 11;
     RichEdit1.SelAttributes.Color := clBlack;
-    RichEdit1.SelAttributes.BackColor := $0080FFFF; // 노란색
+    RichEdit1.SelAttributes.BackColor := $0080FFFF; 
     RichEdit1.SelText := Message + #13#10;
 
     // ---- 시간 ----
@@ -154,7 +154,7 @@ begin
     // ---- 말풍선 메시지 ----
     RichEdit1.SelAttributes.Size := 11;
     RichEdit1.SelAttributes.Color := clBlack;
-    RichEdit1.SelAttributes.BackColor := $00EFEFEF; // 밝은 회색
+    RichEdit1.SelAttributes.BackColor := $00EFEFEF; 
     RichEdit1.SelText := Message + #13#10;
 
     // ---- 시간 ----
@@ -186,7 +186,7 @@ begin
   todayCount := FDQueryMembers.FieldByName('cnt').AsInteger;
 
   // 오늘 날짜 레코드가 없고, 마지막 표시 날짜와 다르면 구분선 삽입
-  if (todayCount = 0)  then                                         //and (LastDisplayedDate <> TodayStr)
+  if (todayCount = 0)  then                                        
   begin
     RichEdit1.Paragraph.Alignment := taCenter;
     RichEdit1.Paragraph.LeftIndent := 0;
@@ -210,7 +210,7 @@ begin
       FDQueryMembers.ParamByName('day').AsWideString := day;
       FDQueryMembers.ExecSQL;
     except
-      // 이미 존재하면 무시 (동시성 문제 대비)
+      // 이미 존재하면 무시
     end;
   end;
 end;
@@ -269,12 +269,6 @@ begin
     FDQueryMembers.ParamByName('userno').AsInteger := UserNo;
     FDQueryMembers.ExecSQL;
 
-    // ❌ 기존 코드 (삭제)
-    // FDQueryMembers.Close;
-    // FDQueryMembers.SQL.Text :=
-    //   'UPDATE chat SET num = num + 1 WHERE ChatRoomId = :roomid';
-    // FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
-    // FDQueryMembers.ExecSQL;
   end;
 
   // ✅ 실시간으로 인원수 조회
@@ -287,7 +281,6 @@ begin
   if not FDQueryMembers.IsEmpty then
     Label2.Caption := FDQueryMembers.FieldByName('num').AsString;
 
-  // 이하 동일...
   FDQueryMembers.Close;
   FDQueryMembers.SQL.Text := 'SELECT MAX(c_no) AS lastid FROM chating WHERE ChatRoomId = :roomid';
   FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
@@ -348,13 +341,6 @@ begin
   FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
   FDQueryMembers.ParamByName('userno').AsInteger := UserNo;
   FDQueryMembers.ExecSQL;
-
-  // ❌ 기존 코드 (삭제)
-  // FDQueryMembers.Close;
-  // FDQueryMembers.SQL.Text :=
-  //   'UPDATE chat SET num = GREATEST(num - 1, 0) WHERE ChatRoomId = :roomid';
-  // FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
-  // FDQueryMembers.ExecSQL;
 
   Label2.Visible := False;
   Label1.Visible := False;
@@ -560,7 +546,7 @@ begin
   LoadNewMessages;
 
   try
-    // ✅ 실시간 COUNT로 변경
+    // 실시간 COUNT로 변경
     FDQueryMembers.Close;
     FDQueryMembers.SQL.Text :=
       'SELECT COUNT(userno) AS num FROM chat_user WHERE ChatRoomId = :roomid';
@@ -718,3 +704,4 @@ begin
 end;
 
 end.
+
