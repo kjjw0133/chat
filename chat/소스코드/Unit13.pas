@@ -17,7 +17,7 @@ type
     UserId: String;
     UserNo: Integer;
     UserName: WideString;
-    IsSelected: Boolean;  // 다중 선택을 위한 필드 추가
+    IsSelected: Boolean; 
   end;
 
   TForm13 = class(TForm)
@@ -54,7 +54,7 @@ type
     procedure FilterList(const Keyword: string);
     procedure DrawMagnifier(const C: TCanvas; const R: TRect);
     function GetSelectedFriend: TFriendInfo;
-    function GetSelectedFriends: TList<TFriendInfo>;  // 다중 선택용
+    function GetSelectedFriends: TList<TFriendInfo>; 
   public
   end;
 
@@ -79,7 +79,6 @@ begin
   FAllFriends := TObjectList<TFriendInfo>.Create(True);
   FFilteredFriends := TObjectList<TFriendInfo>.Create(False);
 
-  // MySQL 연결 시 UTF-8 문자셋 설정
   if not FDConnection1.Connected then
   begin
     FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4';
@@ -116,10 +115,7 @@ var
   NameStr: String;
 begin
   FAllFriends.Clear;
-
-  // CurrentUser.UserNo로 user.id를 조회해야 함
   try
-    // UTF-8 설정 확인
     if not FDConnection1.Connected then
     begin
       FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4';
@@ -140,7 +136,6 @@ begin
     CurrentUserId := FDQuery1.FieldByName('id').AsString;
     FDQuery1.Close;
 
-    // friend 테이블은 user.id를 참조하므로 id로 조회
     FDQuery1.SQL.Text :=
       'SELECT ' +
       '  CASE ' +
@@ -171,10 +166,8 @@ begin
       FriendInfo.UserNo := FDQuery1.FieldByName('friend_userno').AsInteger;
       FriendInfo.UserId := FDQuery1.FieldByName('friend_id').AsString;
 
-      // 여러 방법으로 시도
       NameStr := FDQuery1.FieldByName('friend_name').AsString;
 
-      // AsString으로 직접 가져오기 (가장 안전)
       FriendInfo.UserName := NameStr;
 
       FriendInfo.IsSelected := False;
@@ -286,7 +279,7 @@ procedure TForm13.lbFriendsDrawItem(Control: TWinControl; Index: Integer;
   Rect: TRect; State: TOwnerDrawState);
 var
   C: TCanvas;
-  sName: String;  // WideString -> String 변경
+  sName: String;  
   isSel: Boolean;
   YCenter: Integer;
   avatarRect, checkboxRect, R: TRect;
@@ -352,14 +345,12 @@ begin
   C.Font.Style := [];
   C.Font.Color := clWindowText;
 
-  // DrawTextW 대신 TextOut 사용
   C.Brush.Style := bsClear;
   TextOut(C.Handle,
           R.Left,
           R.Top + (R.Bottom - R.Top - C.TextHeight(sName)) div 2,
           PChar(sName), Length(sName));
 
-  // 체크박스
   checkboxRect.Left := Rect.Right - ITEM_PADDING - 20;
   checkboxRect.Right := checkboxRect.Left + 20;
   checkboxRect.Top := YCenter - 10;
@@ -400,7 +391,7 @@ begin
   if (Index >= 0) and (Index < FFilteredFriends.Count) then
   begin
     Friend := FFilteredFriends[Index];
-    Friend.IsSelected := not Friend.IsSelected;  // 선택 상태 토글
+    Friend.IsSelected := not Friend.IsSelected;
     lbFriends.Invalidate;
   end;
 end;
@@ -453,7 +444,7 @@ var
 begin
   SelectedFriends := GetSelectedFriends;
   try
-    // 친구 선택 확인
+
     if SelectedFriends.Count = 0 then
     begin
       ShowMessage('최소 1명 이상의 친구를 선택해주세요.');
@@ -464,7 +455,6 @@ begin
     chatroomname := Form8.chatroomname;
     userno := CurrentUser.UserNo;
 
-    // 랜덤 비밀번호 생성
     Randomize;
     chatpw := '';
 
@@ -597,3 +587,4 @@ begin
 end;
 
 end.
+
