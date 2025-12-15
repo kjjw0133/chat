@@ -156,6 +156,31 @@ IdSMTP1.Password := 'your-app-password';
 + MySQL 테이블 charset을 utf8mb4로 설정
 + Delphi 프로젝트 인코딩 설정 확인
 
+문제 4: Abstract Error
+증상 : 내가 보낸 친구 요청을 삭제할 때 오류 발생
+해결책 :
++ 기존 코드
+```
+  if ScrollBox2.ComponentCount > 0 then
+  begin
+  ScrollBox2.DestroyComponents;
+end;
+```
++ 수정 코드
+```
+    try
+      while ScrollBox2.ControlCount > 0 do
+      begin
+        if ScrollBox2.Controls[0] <> nil then
+          ScrollBox2.Controls[0].Free;
+      end;
+    except
+      
+    end;
+```
++ Try-Except로 안전하게 처리
++ if ScrollBox2.Controls[0] <> nil then 로 포인터 검증
+  
 ### 향후 개발 계획
 
  + 파일/이미지 전송 기능
