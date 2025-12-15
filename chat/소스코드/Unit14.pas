@@ -116,11 +116,10 @@ begin
     end;
   end;
 
-  // Form17 생성 및 표시
   FriendRequestForm := TForm17.Create(Application);
   try
     FriendRequestForm.Position := poScreenCenter;
-    FriendRequestForm.ShowModal;  // ✅ ShowModal 추가!
+    FriendRequestForm.ShowModal; 
   finally
     FriendRequestForm.Free;
   end;
@@ -250,3 +249,4 @@ begin
 end;
 
 end.
+
