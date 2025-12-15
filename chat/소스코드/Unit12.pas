@@ -57,6 +57,7 @@ begin
   end
   else
   begin
+    // 모든 연결의 Data를 해제
     try
       while ServerSocket1.Socket.ActiveConnections > 0 do
         ServerSocket1.Socket.Connections[0].Close;
@@ -75,6 +76,7 @@ end;
 
 procedure TForm12.ServerSocket1ClientDisconnect(Sender: TObject; Socket: TCustomWinSocket);
 begin
+  // 연결이 끊길 때 할당한 TClientInfo가 있으면 해제
   if Assigned(Socket.Data) then
   begin
     try
@@ -99,9 +101,11 @@ begin
 
   RecvStr := Socket.ReceiveText;
 
+  // 간단한 프로토콜 파싱: "JOIN::roomid::roomname::namespace" 또는 "MSG::roomid::username::body"
   if RecvStr.StartsWith('JOIN::') then
   begin
     parts := RecvStr.Split(['::']);
+    // parts[0] = 'JOIN', parts[1]=roomid, parts[2]=roomname, parts[3]=namespace(optional)
     if Socket.Data = nil then
     begin
       cinfo := TClientInfo.Create;
@@ -119,6 +123,7 @@ begin
     else
       cinfo.Namespace := '/chat';
 
+    // 서버 로그에 표시
     RichEdit1.Paragraph.Alignment := taLeftJustify;
     RichEdit1.SelStart := RichEdit1.GetTextLen;
     RichEdit1.SelAttributes.Size := 9;
@@ -129,13 +134,16 @@ begin
   else if RecvStr.StartsWith('MSG::') then
   begin
     parts := RecvStr.Split(['::']);
+    // parts[0]='MSG', parts[1]=roomid, parts[2]=username, parts[3]=body
     if Length(parts) >= 4 then
     begin
       sRoomID := parts[1];
       sUser := parts[2];
+      // body may contain '::' inside content, join the rest
       sBody := String.Join('::', Copy(parts, 3, Length(parts) - 3));
       roomID := StrToIntDef(sRoomID, -1);
 
+      // 서버 화면에 로그
       RichEdit1.Paragraph.Alignment := taLeftJustify;
       RichEdit1.SelStart := RichEdit1.GetTextLen;
       RichEdit1.SelAttributes.Size := 9;
@@ -147,7 +155,7 @@ begin
       RichEdit1.SelAttributes.Size := 7;
       RichEdit1.SelText := NowStr + sLineBreak + sLineBreak;
 
-      // 전송용 포맷 
+      // 전송용 포맷 (클라이언트가 받기 쉬운 포맷)
       SendStr := Format('%s%s%s%s%s', [sUser, sLineBreak, sBody, ' : ', NowStr]);
 
 
@@ -156,7 +164,8 @@ begin
       begin
         conSock := ServerSocket1.Socket.Connections[i];
         if conSock = Socket then
-          Continue; // 보낸 본인 제외 
+          Continue; // 보낸 본인 제외 (원하면 포함시킬 수 있음)
+//          conSock.SendText(SendStr);
 
         if Assigned(conSock.Data) then
         begin
@@ -164,16 +173,19 @@ begin
             cinfo := TClientInfo(conSock.Data);
             if (cinfo.RoomID = roomID) then
             begin
+              // (네임스페이스도 체크하려면 아래처럼 추가)
+              // if cinfo.Namespace = TClientInfo(Socket.Data).Namespace then ...
               conSock.SendText(SendStr);
             end;
           except
+            // ignore malformed Data
           end;
         end;
       end;
     end
     else
     begin
-      // 에러 로그
+      // 포맷 에러 로그
       RichEdit1.Paragraph.Alignment := taLeftJustify;
       RichEdit1.SelStart := RichEdit1.GetTextLen;
       RichEdit1.SelAttributes.Size := 9;
@@ -184,6 +196,7 @@ begin
   end
   else
   begin
+    // 기존 동작(기본 텍스트 브로드캐스트) — 포맷 없는 텍스트는 모든 연결에 전송 (구형 호환)
     NowStr := FormatDateTime('t', Now);
 
     RichEdit1.Paragraph.Alignment := taLeftJustify;
@@ -214,5 +227,4 @@ begin
 end;
 
 end.
-
 

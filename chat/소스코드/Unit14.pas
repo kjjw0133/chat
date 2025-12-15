@@ -1,4 +1,4 @@
-unit Unit14;
+ï»¿unit Unit14;
 
 interface
 
@@ -44,6 +44,7 @@ type
     procedure SpeedButton2Click(Sender: TObject);
     procedure LabelCloseClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
   private
     FFriendManager: TFriendManager;
     FFilteredFriends: TList<TFriendInfo>;
@@ -54,7 +55,7 @@ type
 
 implementation
 
-uses unit2, unit16;
+uses unit2, unit16,unit17;
 
 {$R *.dfm}
 
@@ -87,13 +88,42 @@ begin
   end
   else
   begin
-    ShowMessage('Ä£±¸ ¸ñ·ÏÀ» ºÒ·¯¿Ã ¼ö ¾ø½À´Ï´Ù.');
+    ShowMessage('ì¹œêµ¬ ëª©ë¡ì„ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.');
   end;
 end;
 
 procedure TForm14.SpeedButton2Click(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TForm14.SpeedButton3Click(Sender: TObject);
+var
+  FriendRequestForm: TForm17;
+begin
+  // ë¡œê·¸ì¸ ì²´í¬
+  FDQueryMembers.Close;
+  FDQueryMembers.SQL.Text := 'select is_logged_in from user where userno = :userno';
+  FDQueryMembers.ParamByName('userno').AsInteger := CurrentUser.UserNo;
+  FDQueryMembers.Open;
+
+  if not FDQueryMembers.FieldByName('is_logged_in').AsBoolean then
+  begin
+    if not IsLoggedIn then
+    begin
+      ShowMessage('ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤.');
+      Exit;
+    end;
+  end;
+
+  // Form17 ìƒì„± ë° í‘œì‹œ
+  FriendRequestForm := TForm17.Create(Application);
+  try
+    FriendRequestForm.Position := poScreenCenter;
+    FriendRequestForm.ShowModal;  // âœ… ShowModal ì¶”ê°€!
+  finally
+    FriendRequestForm.Free;
+  end;
 end;
 
 procedure TForm14.LabelCloseClick(Sender: TObject);
@@ -119,7 +149,7 @@ begin
       lbFriends.Items.Add(Friend.UserName);
     end;
 
-    userCountLabel.Caption := 'Ä£±¸ ' + IntToStr(FFilteredFriends.Count) + '¸í';
+    userCountLabel.Caption := 'ì¹œêµ¬ ' + IntToStr(FFilteredFriends.Count) + 'ëª…';
   finally
     lbFriends.Items.EndUpdate;
   end;

@@ -58,6 +58,7 @@ begin
   try
     Query.Connection := FConnection;
 
+    // 1. UserNo로 UserId 조회
     Query.SQL.Text := 'SELECT id FROM user WHERE userno = :userno';
     Query.ParamByName('userno').AsInteger := CurrentUserNo;
     Query.Open;
@@ -68,6 +69,7 @@ begin
     CurrentUserId := Query.FieldByName('id').AsString;
     Query.Close;
 
+    // 2. 친구 목록 조회
     Query.SQL.Text :=
       'SELECT ' +
       '  CASE ' +
@@ -149,4 +151,3 @@ begin
 end;
 
 end.
-

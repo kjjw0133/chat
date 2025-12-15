@@ -124,6 +124,8 @@ begin
   Self.BringToFront;
 end;
 
+// Unit7.pas의 SpeedButton3Click 수정
+
 procedure TForm7.SpeedButton3Click(Sender: TObject);
 var
   FriendRequestForm: TForm17;
@@ -143,10 +145,11 @@ begin
     end;
   end;
 
+  // Form17 생성 및 표시
   FriendRequestForm := TForm17.Create(Application);
   try
     FriendRequestForm.Position := poScreenCenter;
-    FriendRequestForm.ShowModal;  
+    FriendRequestForm.ShowModal;
   finally
     FriendRequestForm.Free;
   end;
@@ -577,4 +580,3 @@ begin
 end;
 
 end.
-

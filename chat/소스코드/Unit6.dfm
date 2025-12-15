@@ -84,14 +84,13 @@ object Form6: TForm6
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Server='
-      'Database= '
-      'User_Name='
-      'Password='
+      'Server=localhost'
+      'Database=chating app'
+      'User_Name=root'
+      'Password=1234'
       'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Left = 548
     Top = 213
   end
 end
-

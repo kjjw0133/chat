@@ -36,21 +36,6 @@ object Form17: TForm17
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object LabelClose: TLabel
-      Left = 410
-      Top = 8
-      Width = 16
-      Height = 32
-      Cursor = crHandPoint
-      Caption = #215
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -24
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      OnClick = LabelCloseClick
-    end
     object requestCountLabel: TLabel
       Left = 20
       Top = 42
@@ -67,9 +52,9 @@ object Form17: TForm17
   end
   object ScrollBox1: TScrollBox
     Left = 0
-    Top = 79
+    Top = 63
     Width = 450
-    Height = 461
+    Height = 218
     BorderStyle = bsNone
     Color = clWhite
     ParentColor = False
@@ -86,23 +71,68 @@ object Form17: TForm17
     ParentBackground = False
     TabOrder = 2
   end
+  object ScrollBox2: TScrollBox
+    Left = 0
+    Top = 360
+    Width = 450
+    Height = 240
+    BorderStyle = bsNone
+    Color = clWhite
+    ParentColor = False
+    TabOrder = 3
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 287
+    Width = 450
+    Height = 73
+    BevelOuter = bvNone
+    Color = clWhite
+    ParentBackground = False
+    TabOrder = 4
+    object Label1: TLabel
+      Left = 20
+      Top = 12
+      Width = 119
+      Height = 30
+      Caption = #48372#45240' '#50836#52397' '#49688
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -21
+      Font.Name = 'Malgun Gothic'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object receiverCountLabel: TLabel
+      Left = 20
+      Top = 48
+      Width = 47
+      Height = 15
+      Caption = #50836#52397' 0'#44148
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clGray
+      Font.Height = -12
+      Font.Name = 'Malgun Gothic'
+      Font.Style = []
+      ParentFont = False
+    end
+  end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Server='
-      'Database='
-      'User_Name='
-      'Password='
-      'CharacterSet='
+      'Server=localhost'
+      'Database=chating app'
+      'User_Name=root'
+      'Password=1234'
+      'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Connected = True
     LoginPrompt = False
-    Left = 88
-    Top = 296
+    Left = 248
+    Top = 184
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    VendorLib = '\libmysql.dll'
-    Left = 208
-    Top = 352
+    VendorLib = 'C:\MYPROGRAM\delphi\mysql\mysql-5.7.33-win32\lib\libmysql.dll'
+    Left = 376
+    Top = 192
   end
 end
-
