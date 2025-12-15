@@ -109,7 +109,7 @@ begin
           ScrollBox1.Controls[0].Free;
       end;
     except
-      // 컴포넌트 제거 중 오류 발생 시 무시
+      // 컴포넌트 제거 중 오류 발생 시 무시 
     end;
 
     Query.SQL.Text :=
@@ -428,8 +428,6 @@ begin
       ShowMessage('친구 요청을 수락했습니다.');
       // ScrollBox1의 모든 Panel을 지우고 DB에서 다시 조회
       LoadFriendRequests;
-      // ScrollBox2도 함께 갱신 (친구 목록에 추가되었을 수 있음)
-      LoadFriendReceiver;
     end
   );
 end;
@@ -464,7 +462,6 @@ begin
     begin
       ShowMessage('친구 요청을 거절했습니다.');
       LoadFriendRequests;  // ScrollBox1 갱신
-//      LoadFriendReceiver;  // ScrollBox2 갱신
     end
   );
 end;
@@ -498,9 +495,9 @@ begin
     begin
       ShowMessage('친구 요청을 취소했습니다.');
       LoadFriendReceiver;  // ScrollBox2의 모든 Panel을 지우고 DB에서 다시 조회
-      //LoadFriendRequests;  // ScrollBox1도 갱신
     end
   );
 end;
 
 end.
+
