@@ -274,7 +274,7 @@ begin
     CurrentUserId := Query.FieldByName('id').AsString;
     Query.Close;
 
-    // ScrollBox2의 기존 컴포넌트 모두 제거 (안전하게)
+    // ScrollBox2의 기존 컴포넌트 모두 제거 
     try
       while ScrollBox2.ControlCount > 0 do
       begin
@@ -500,4 +500,5 @@ begin
 end;
 
 end.
+
 
