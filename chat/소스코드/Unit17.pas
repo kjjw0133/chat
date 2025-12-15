@@ -9,7 +9,7 @@ uses
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.UI.Intf,
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.Phys.MySQL,
-  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,System.Threading;
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,System.Threading,Generics.Collections;
 
 type
   TFriendRequestInfo = record
@@ -84,15 +84,6 @@ var
   AvatarColor: TColor;
   i: Integer;
 begin
-  // ScrollBox1의 모든 자식 컴포넌트를 반복하면서 Panel만 삭제
-  for i := ScrollBox1.ControlCount - 1 downto 0 do
-  begin
-    if ScrollBox1.Controls[i] is TPanel then
-    begin
-      ScrollBox1.Controls[i].Free;
-    end;
-  end;
-
   Query := TFDQuery.Create(nil);
   try
     Query.Connection := FDConnection1;
@@ -109,6 +100,17 @@ begin
 
     CurrentUserId := Query.FieldByName('id').AsString;
     Query.Close;
+
+    // ScrollBox1의 기존 컴포넌트 모두 제거
+    try
+      while ScrollBox1.ControlCount > 0 do
+      begin
+        if ScrollBox1.Controls[0] <> nil then
+          ScrollBox1.Controls[0].Free;
+      end;
+    except
+      // 컴포넌트 제거 중 오류 발생 시 무시
+    end;
 
     Query.SQL.Text :=
       'SELECT f.request_id, ' +
@@ -254,17 +256,7 @@ var
   ReceiverInfo: TFriendReceiverInfo;
   ReceiverCount: Integer;
   AvatarColor: TColor;
-  i: Integer;
 begin
-  // ScrollBox2의 모든 자식 컴포넌트를 반복하면서 Panel만 삭제
-  for i := ScrollBox2.ControlCount - 1 downto 0 do
-  begin
-    if ScrollBox2.Controls[i] is TPanel then
-    begin
-      ScrollBox2.Controls[i].Free;
-    end;
-  end;
-
   Query := TFDQuery.Create(nil);
   try
     Query.Connection := FDConnection1;
@@ -281,6 +273,17 @@ begin
 
     CurrentUserId := Query.FieldByName('id').AsString;
     Query.Close;
+
+    // ScrollBox2의 기존 컴포넌트 모두 제거 (안전하게)
+    try
+      while ScrollBox2.ControlCount > 0 do
+      begin
+        if ScrollBox2.Controls[0] <> nil then
+          ScrollBox2.Controls[0].Free;
+      end;
+    except
+      // 컴포넌트 제거 중 오류 발생 시 무시
+    end;
 
     Query.SQL.Text := 'SELECT f.request_id, f.receiver_id, '+
     ' u.userno AS receiver_no, u.name AS receiver_name '+
@@ -389,7 +392,6 @@ begin
 
       TopOffset := TopOffset + ReceiverPanel.Height + 1;
       Query.Next;
-
     end;
 
   finally
@@ -462,7 +464,7 @@ begin
     begin
       ShowMessage('친구 요청을 거절했습니다.');
       LoadFriendRequests;  // ScrollBox1 갱신
-      LoadFriendReceiver;  // ScrollBox2 갱신
+//      LoadFriendReceiver;  // ScrollBox2 갱신
     end
   );
 end;
@@ -496,7 +498,7 @@ begin
     begin
       ShowMessage('친구 요청을 취소했습니다.');
       LoadFriendReceiver;  // ScrollBox2의 모든 Panel을 지우고 DB에서 다시 조회
-      LoadFriendRequests;  // ScrollBox1도 갱신
+      //LoadFriendRequests;  // ScrollBox1도 갱신
     end
   );
 end;
