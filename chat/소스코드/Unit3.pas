@@ -59,11 +59,11 @@ begin
 
   if ID.IsEmpty or PW.IsEmpty or Name.IsEmpty or Email.IsEmpty then
   begin
-    ShowMessage('¸ğµç Ç×¸ñÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä.');
+    ShowMessage('ëª¨ë“  í•­ëª©ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.');
     Exit;
   end;
 
-  // 1. ·£´ı Salt »ı¼º (GUID »ç¿ë)
+  // ëœë¤ Salt ìƒì„± (GUID ì‚¬ìš©)
   Salt := THashSHA2.GetHashString(TGUID.NewGuid.ToString + DateTimeToStr(Now));
 
   hashedInput := THashSHA2.GetHashString(PW + Salt);
@@ -101,7 +101,7 @@ begin
         FDQueryMembers.ExecSQL;
       end;
 
-      ShowMessage('È¸¿ø°¡ÀÔ ¼º°ø: ' + CurrentUser.Name);
+      ShowMessage('íšŒì›ê°€ì… ì„±ê³µ: ' + CurrentUser.Name);
       Form7.UserNo := CurrentUser.UserNo;
 
       Edit1.Clear;
@@ -112,7 +112,7 @@ begin
       ModalResult := mrOk;
     end
     else
-      ShowMessage('È¸¿ø°¡ÀÔÀº µÇ¾úÁö¸¸ ·Î±×ÀÎ Á¤º¸¸¦ °¡Á®¿ÀÁö ¸øÇß½À´Ï´Ù.');
+      ShowMessage('íšŒì›ê°€ì…ì€ ë˜ì—ˆì§€ë§Œ ë¡œê·¸ì¸ ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.');
   finally
     FDQueryMembers.Close;
   end;
@@ -134,4 +134,5 @@ begin
 end;
 
 end.
+
 
