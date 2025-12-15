@@ -110,8 +110,6 @@ begin
 
   Self.Hide;
   Application.ProcessMessages;  // Hide가 완전히 처리되도록 대기
-
-  // Form14 생성 및 표시
   FriendForm := TForm14.Create(Application);
   try
     FriendForm.Position := poScreenCenter;
@@ -123,8 +121,6 @@ begin
   Self.Show;
   Self.BringToFront;
 end;
-
-// Unit7.pas의 SpeedButton3Click 수정
 
 procedure TForm7.SpeedButton3Click(Sender: TObject);
 var
@@ -145,7 +141,6 @@ begin
     end;
   end;
 
-  // Form17 생성 및 표시
   FriendRequestForm := TForm17.Create(Application);
   try
     FriendRequestForm.Position := poScreenCenter;
@@ -580,3 +575,4 @@ begin
 end;
 
 end.
+
