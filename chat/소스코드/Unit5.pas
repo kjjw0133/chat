@@ -1,4 +1,4 @@
-unit Unit5;
+ï»¿unit Unit5;
 
 interface
 
@@ -58,14 +58,14 @@ begin
     if pw = Edit1.Text then
     begin
         IsLoggedIn := True;
-        ShowMessage('·Î±×ÀÎ ¼º°ø');
+        ShowMessage('Â·ÃŽÂ±Ã—Ã€ÃŽ Â¼ÂºÂ°Ã¸');
 
         Form5.Close;
         Form6.Show;
     end
     else
     begin
-      ShowMessage('¿À·ù ¹ß»ý');
+      ShowMessage('Â¿Ã€Â·Ã¹ Â¹ÃŸÂ»Ã½');
     end;
 
   end;

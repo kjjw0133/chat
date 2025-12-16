@@ -1,4 +1,4 @@
-unit Unit10;
+ï»¿unit Unit10;
 
 interface
 
@@ -71,7 +71,7 @@ begin
   end
   else
   begin
-    ShowMessage('DB: ºÒ·¯¿À±â ¿À·ù10');
+    ShowMessage('DB: ÂºÃ’Â·Â¯Â¿Ã€Â±Ã¢ Â¿Ã€Â·Ã¹10');
   end;
 
 end;

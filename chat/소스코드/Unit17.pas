@@ -109,7 +109,7 @@ begin
           ScrollBox1.Controls[0].Free;
       end;
     except
-      // 컴포넌트 제거 중 오류 발생 시 무시 
+      // 컴포넌트 제거 중 오류 발생 시 무시
     end;
 
     Query.SQL.Text :=
@@ -274,7 +274,7 @@ begin
     CurrentUserId := Query.FieldByName('id').AsString;
     Query.Close;
 
-    // ScrollBox2의 기존 컴포넌트 모두 제거 
+    // ScrollBox2의 기존 컴포넌트 모두 제거
     try
       while ScrollBox2.ControlCount > 0 do
       begin
@@ -462,6 +462,7 @@ begin
     begin
       ShowMessage('친구 요청을 거절했습니다.');
       LoadFriendRequests;  // ScrollBox1 갱신
+//      LoadFriendReceiver;  // ScrollBox2 갱신
     end
   );
 end;
@@ -495,10 +496,9 @@ begin
     begin
       ShowMessage('친구 요청을 취소했습니다.');
       LoadFriendReceiver;  // ScrollBox2의 모든 Panel을 지우고 DB에서 다시 조회
+      //LoadFriendRequests;  // ScrollBox1도 갱신
     end
   );
 end;
 
 end.
-
-

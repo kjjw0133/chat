@@ -69,6 +69,7 @@ begin
   FDQuery1.ParamByName('me').AsWideString := requester_id;
   FDQuery1.ParamByName('other').AsWideString := receiver_id;
   FDQuery1.Open;
+  // 상대방, 나 둘 중 하나라도 친구 추가를 보냈으면 친구 추가가 안되도록 구현
 
    if not FDQuery1.IsEmpty then
    begin

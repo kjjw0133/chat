@@ -1,4 +1,4 @@
-unit FriendManager;
+﻿unit FriendManager;
 
 interface
 
@@ -58,7 +58,7 @@ begin
   try
     Query.Connection := FConnection;
 
-    // 1. UserNo�� UserId ��ȸ
+    // 1. UserNo·Î UserId Á¶È¸
     Query.SQL.Text := 'SELECT id FROM user WHERE userno = :userno';
     Query.ParamByName('userno').AsInteger := CurrentUserNo;
     Query.Open;
@@ -69,7 +69,7 @@ begin
     CurrentUserId := Query.FieldByName('id').AsString;
     Query.Close;
 
-    // 2. ģ�� ��� ��ȸ
+    // 2. Ä£±¸ ¸ñ·Ï Á¶È¸
     Query.SQL.Text :=
       'SELECT ' +
       '  CASE ' +

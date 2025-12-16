@@ -47,7 +47,7 @@ function TForm8.roomnameequal: Boolean;
 var
   roomname: String;
 begin
-  Result := True;  
+  Result := True;  // 기본값 설정
 
   try
     // 데이터베이스 연결 확인
@@ -146,6 +146,5 @@ begin
 end;
 
 end.
-
 
 
