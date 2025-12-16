@@ -2,13 +2,15 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>1899-12-30 00:00:00.000.502,=C:\Users\H\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.758,C:\Users\H\Documents\Embarcadero\Studio\Projects\Unit12.dfm=C:\MYPROGRAM\delphi\chat\Unit12.dfm</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.009,C:\MYPROGRAM\delphi\chat\Unit12.dfm=C:\MYPROGRAM\delphi\chat\Server\Server.dfm</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.009,C:\MYPROGRAM\delphi\chat\Unit12.pas=C:\MYPROGRAM\delphi\chat\Server\Server.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.802,=C:\Users\H\Documents\Embarcadero\Studio\Projects\Unit12.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.026,=C:\MYPROGRAM\delphi\chat\Untitled1.css</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.902,C:\Users\H\Documents\Embarcadero\Studio\Projects\Project2.dproj=C:\MYPROGRAM\delphi\chat\Project2.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.229,=C:\MYPROGRAM\delphi\chat - 복사본\Unit9.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.577,C:\MYPROGRAM\delphi\chat - 복사본\Unit9.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.758,C:\MYPROGRAM\delphi\chat\Unit12.dfm=C:\Users\H\Documents\Embarcadero\Studio\Projects\Unit12.dfm</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.902,C:\MYPROGRAM\delphi\chat\Project2.dproj=C:\Users\H\Documents\Embarcadero\Studio\Projects\Project2.dproj</Transaction>
     <Transaction>1899-12-30 00:00:00.000.006,=C:\Users\H\Documents\Embarcadero\Studio\Projects\Unit12.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.758,C:\Users\H\Documents\Embarcadero\Studio\Projects\Unit12.pas=C:\MYPROGRAM\delphi\chat\Unit12.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.758,C:\MYPROGRAM\delphi\chat\Unit12.pas=C:\Users\H\Documents\Embarcadero\Studio\Projects\Unit12.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.009,C:\MYPROGRAM\delphi\chat\Server\Server.dfm=C:\MYPROGRAM\delphi\chat\Unit12.dfm</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.009,C:\MYPROGRAM\delphi\chat\Server\Server.pas=C:\MYPROGRAM\delphi\chat\Unit12.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.026,=C:\MYPROGRAM\delphi\chat\Untitled1.css</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.802,=C:\Users\H\Documents\Embarcadero\Studio\Projects\Unit12.pas</Transaction>
   </Transactions>
 </BorlandProject>
