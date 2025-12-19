@@ -137,20 +137,19 @@ object Form11: TForm11
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     DriverID = 'MySQL'
-    VendorLib = '\libmysql.dll'
+    VendorLib = 'C:\MYPROGRAM\delphi\mysql\mysql-5.7.33-win32\lib\libmysql.dll'
     Left = 619
     Top = 184
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Server='
-      'Database='
-      'User_Name='
-      'Password='
+      'Server=localhost'
+      'Database=chating app'
+      'User_Name=root'
+      'Password=1234'
       'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Left = 731
     Top = 432
   end
 end
-

@@ -167,54 +167,6 @@ begin
   ScrollRichEditToBottom;
 end;
 
-procedure TForm1.CheckAndInsertDateSeparator;
-var
-  TodayStr, day: string;
-  todayCount: Integer;
-begin
-  TodayStr := FormatDateTime('yyyy-mm-dd', Now);
-
-  // 오늘 날짜 레코드가 이미 존재하는지 확인
-  FDQueryMembers.Close;
-  FDQueryMembers.SQL.Text :=
-    'SELECT COUNT(*) AS cnt FROM chating ' +
-    'WHERE ChatRoomId = :roomid AND day = :today';
-  FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
-  FDQueryMembers.ParamByName('today').AsString := TodayStr;
-  FDQueryMembers.Open;
-
-  todayCount := FDQueryMembers.FieldByName('cnt').AsInteger;
-
-  // 오늘 날짜 레코드가 없고, 마지막 표시 날짜와 다르면 구분선 삽입
-  if (todayCount = 0)  then                                         //and (LastDisplayedDate <> TodayStr)
-  begin
-    RichEdit1.Paragraph.Alignment := taCenter;
-    RichEdit1.Paragraph.LeftIndent := 0;
-    RichEdit1.Paragraph.RightIndent := 0;
-    RichEdit1.SelStart := RichEdit1.GetTextLen;
-    RichEdit1.SelAttributes.Size := 9;
-    RichEdit1.SelAttributes.Color := clGray;
-    RichEdit1.SelAttributes.Style := [fsBold];
-    RichEdit1.SelAttributes.BackColor := clWhite;
-    day := TodayStr;
-    RichEdit1.SelText := #13#10'─────── ' + day + ' ───────'#13#10#13#10;
-
-    LastDisplayedDate := TodayStr;
-
-    // DB에 날짜 레코드 삽입
-    try
-      FDQueryMembers.Close;
-      FDQueryMembers.SQL.Text :=
-        'INSERT INTO chating (ChatRoomId, day) VALUES (:roomid, :day)';
-      FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
-      FDQueryMembers.ParamByName('day').AsWideString := day;
-      FDQueryMembers.ExecSQL;
-    except
-      // 이미 존재하면 무시 (동시성 문제 대비)
-    end;
-  end;
-end;
-
 procedure TForm1.JoinChatRoom(ARoomID: Integer; ARoomNum: Integer; ARoomName: string);
 var
   JoinCmd: string;
@@ -430,9 +382,65 @@ begin
   end;
 end;
 
+procedure TForm1.CheckAndInsertDateSeparator;
+var
+  TodayStr, day: string;
+  todayCount: Integer;
+  DateMsg: string;
+begin
+  TodayStr := FormatDateTime('yyyy-mm-dd', Now);
+
+  // 오늘 날짜 레코드가 이미 존재하는지 확인
+  FDQueryMembers.Close;
+  FDQueryMembers.SQL.Text :=
+    'SELECT COUNT(*) AS cnt FROM chating ' +
+    'WHERE ChatRoomId = :roomid AND day = :today AND contents IS NULL';
+  FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
+  FDQueryMembers.ParamByName('today').AsString := TodayStr;
+  FDQueryMembers.Open;
+
+  todayCount := FDQueryMembers.FieldByName('cnt').AsInteger;
+
+  // 오늘 날짜 레코드가 없으면 DB에 삽입하고 서버에 브로드캐스트
+  if (todayCount = 0) then
+  begin
+    // ✅ UI에 먼저 표시 (로컬)
+    RichEdit1.Paragraph.Alignment := taCenter;
+    RichEdit1.Paragraph.LeftIndent := 0;
+    RichEdit1.Paragraph.RightIndent := 0;
+    RichEdit1.SelStart := RichEdit1.GetTextLen;
+    RichEdit1.SelAttributes.Size := 9;
+    RichEdit1.SelAttributes.Color := clGray;
+    RichEdit1.SelAttributes.Style := [fsBold];
+    RichEdit1.SelAttributes.BackColor := clWhite;
+    RichEdit1.SelText := #13#10'─────── ' + TodayStr + ' ───────'#13#10#13#10;
+
+    LastDisplayedDate := TodayStr;
+
+    // DB에 날짜 레코드 삽입
+    try
+      FDQueryMembers.Close;
+      FDQueryMembers.SQL.Text :=
+        'INSERT INTO chating (ChatRoomId, day) VALUES (:roomid, :day)';
+      FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
+      FDQueryMembers.ParamByName('day').AsWideString := TodayStr;
+      FDQueryMembers.ExecSQL;
+
+      // ✅ 모든 클라이언트에게 날짜 구분선 브로드캐스트
+      if ClientSocket1.Active then
+      begin
+        DateMsg := Format('DATE::%d::%s', [CurrentRoomID, TodayStr]);
+        ClientSocket1.Socket.SendText(DateMsg);
+      end;
+    except
+      // 이미 존재하면 무시 (동시성 문제 대비)
+    end;
+  end;
+end;
+
 procedure TForm1.LoadChatMessages;
 var
-  senderType, senderName, contents, timeStr: string;
+  senderType, senderName, contents, timeStr, dateStr: string;
   lastDate: string;
 begin
   RichEdit1.Clear;
@@ -449,34 +457,44 @@ begin
     FDQueryMembers.ParamByName('userno').AsInteger := CurrentUser.UserNo;
     FDQueryMembers.ParamByName('roomid').AsInteger := ChatRoomId;
     FDQueryMembers.Open;
+
     while not FDQueryMembers.Eof do
     begin
+      // 날짜 구분선 처리 (contents가 NULL이거나 빈 문자열)
       if FDQueryMembers.FieldByName('contents').IsNull or
          (Trim(FDQueryMembers.FieldByName('contents').AsString) = '') then
       begin
-        lastDate := FDQueryMembers.FieldByName('day').AsString;
-        RichEdit1.Paragraph.Alignment := taCenter;
-        RichEdit1.Paragraph.LeftIndent := 0;
-        RichEdit1.Paragraph.RightIndent := 0;
-        RichEdit1.SelStart := RichEdit1.GetTextLen;
-        RichEdit1.SelAttributes.Size := 9;
-        RichEdit1.SelAttributes.Color := clGray;
-        RichEdit1.SelAttributes.Style := [fsBold];
-        RichEdit1.SelAttributes.BackColor := clWhite;
-        RichEdit1.SelText := #13#10'─────── ' + lastDate + ' ───────'#13#10#13#10;
-        LastDisplayedDate := lastDate;
+        dateStr := FDQueryMembers.FieldByName('day').AsString;
+
+        // 마지막 표시 날짜와 다를 때만 표시
+        if LastDisplayedDate <> dateStr then
+        begin
+          RichEdit1.Paragraph.Alignment := taCenter;
+          RichEdit1.Paragraph.LeftIndent := 0;
+          RichEdit1.Paragraph.RightIndent := 0;
+          RichEdit1.SelStart := RichEdit1.GetTextLen;
+          RichEdit1.SelAttributes.Size := 9;
+          RichEdit1.SelAttributes.Color := clGray;
+          RichEdit1.SelAttributes.Style := [fsBold];
+          RichEdit1.SelAttributes.BackColor := clWhite;
+          RichEdit1.SelText := #13#10'─────── ' + dateStr + ' ───────'#13#10#13#10;
+          LastDisplayedDate := dateStr;
+        end;
       end
       else
       begin
+        // 실제 메시지 처리
         senderType := FDQueryMembers.FieldByName('sender_type').AsString;
         senderName := FDQueryMembers.FieldByName('name').AsString;
         contents := FDQueryMembers.FieldByName('contents').AsString;
         timeStr := FormatDateTime('t', FDQueryMembers.FieldByName('nowtime').AsDateTime);
         AddChatBubble(senderName, contents, timeStr, (senderType = 'me'));
       end;
+
       LastChatNo := FDQueryMembers.FieldByName('c_no').AsInteger;
       FDQueryMembers.Next;
     end;
+
     if LastDisplayedDate = '' then
       LastDisplayedDate := FormatDateTime('yyyy-mm-dd', Now);
   except
@@ -487,7 +505,7 @@ end;
 
 procedure TForm1.LoadNewMessages;
 var
-  senderType, senderName, contents, timeStr: string;
+  senderType, senderName, contents, timeStr, dateStr: string;
 begin
   try
     FDQueryMembers.Close;
@@ -506,28 +524,34 @@ begin
 
     while not FDQueryMembers.Eof do
     begin
+      // 날짜 구분선 처리 (contents가 NULL이거나 빈 문자열)
       if FDQueryMembers.FieldByName('contents').IsNull or
          (Trim(FDQueryMembers.FieldByName('contents').AsString) = '') then
       begin
-        RichEdit1.Paragraph.Alignment := taCenter;
-        RichEdit1.Paragraph.LeftIndent := 0;
-        RichEdit1.Paragraph.RightIndent := 0;
-        RichEdit1.SelStart := RichEdit1.GetTextLen;
-        RichEdit1.SelAttributes.Size := 9;
-        RichEdit1.SelAttributes.Color := clGray;
-        RichEdit1.SelAttributes.Style := [fsBold];
-        RichEdit1.SelAttributes.BackColor := clWhite;
-        RichEdit1.SelText := #13#10'─────── ' +
-          FDQueryMembers.FieldByName('day').AsString +
-          ' ───────'#13#10#13#10;
+        dateStr := FDQueryMembers.FieldByName('day').AsString;
+
+        // ✅ 마지막 표시 날짜와 다를 때만 표시
+        if LastDisplayedDate <> dateStr then
+        begin
+          RichEdit1.Paragraph.Alignment := taCenter;
+          RichEdit1.Paragraph.LeftIndent := 0;
+          RichEdit1.Paragraph.RightIndent := 0;
+          RichEdit1.SelStart := RichEdit1.GetTextLen;
+          RichEdit1.SelAttributes.Size := 9;
+          RichEdit1.SelAttributes.Color := clGray;
+          RichEdit1.SelAttributes.Style := [fsBold];
+          RichEdit1.SelAttributes.BackColor := clWhite;
+          RichEdit1.SelText := #13#10'─────── ' + dateStr + ' ───────'#13#10#13#10;
+          LastDisplayedDate := dateStr;
+        end;
       end
       else
       begin
+        // 실제 메시지 처리
         senderType := FDQueryMembers.FieldByName('sender_type').AsString;
         senderName := FDQueryMembers.FieldByName('name').AsString;
         contents := FDQueryMembers.FieldByName('contents').AsString;
         timeStr := FormatDateTime('t', FDQueryMembers.FieldByName('nowtime').AsDateTime);
-
         AddChatBubble(senderName, contents, timeStr, (senderType = 'me'));
       end;
 
@@ -607,7 +631,7 @@ procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
   RecvText: string;
   parts: TArray<string>;
-  roomIDStr, senderName, contents: string;
+  roomIDStr, senderName, contents, dateStr: string;
   roomID: Integer;
 begin
   RecvText := Socket.ReceiveText;
@@ -628,6 +652,37 @@ begin
 
         NowStr := FormatDateTime('t', Now);
         AddChatBubble(senderName, contents, NowStr, False);
+      end;
+    end;
+  end
+
+  // ✅ 날짜 구분선 처리 추가
+  else if RecvText.StartsWith('DATE::') then
+  begin
+    parts := RecvText.Split(['::']);
+    if Length(parts) >= 3 then
+    begin
+      roomIDStr := parts[1];
+      dateStr := parts[2];
+      roomID := StrToIntDef(roomIDStr, -1);
+
+      if roomID = CurrentRoomID then
+      begin
+        // 마지막 표시 날짜와 다를 때만 표시
+        if LastDisplayedDate <> dateStr then
+        begin
+          RichEdit1.Paragraph.Alignment := taCenter;
+          RichEdit1.Paragraph.LeftIndent := 0;
+          RichEdit1.Paragraph.RightIndent := 0;
+          RichEdit1.SelStart := RichEdit1.GetTextLen;
+          RichEdit1.SelAttributes.Size := 9;
+          RichEdit1.SelAttributes.Color := clGray;
+          RichEdit1.SelAttributes.Style := [fsBold];
+          RichEdit1.SelAttributes.BackColor := clWhite;
+          RichEdit1.SelText := #13#10'─────── ' + dateStr + ' ───────'#13#10#13#10;
+          ScrollRichEditToBottom;
+          LastDisplayedDate := dateStr;
+        end;
       end;
     end;
   end

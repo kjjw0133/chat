@@ -55,7 +55,7 @@ begin
 
   if FDQuery1.IsEmpty then
   begin
-    ShowMessage('í•´ë‹¹ ì‚¬ìš©ìê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.');
+    ShowMessage('ÇØ´ç »ç¿ëÀÚ°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.');
     Exit;
   end;
 
@@ -69,11 +69,11 @@ begin
   FDQuery1.ParamByName('me').AsWideString := requester_id;
   FDQuery1.ParamByName('other').AsWideString := receiver_id;
   FDQuery1.Open;
-  // ìƒëŒ€ë°©, ë‚˜ ë‘˜ ì¤‘ í•˜ë‚˜ë¼ë„ ì¹œêµ¬ ì¶”ê°€ë¥¼ ë³´ëƒˆìœ¼ë©´ ì¹œêµ¬ ì¶”ê°€ê°€ ì•ˆë˜ë„ë¡ êµ¬í˜„
+  // »ó´ë¹æ, ³ª µÑ Áß ÇÏ³ª¶óµµ Ä£±¸ Ãß°¡¸¦ º¸³ÂÀ¸¸é Ä£±¸ Ãß°¡°¡ ¾ÈµÇµµ·Ï ±¸Çö
 
    if not FDQuery1.IsEmpty then
    begin
-    ShowMessage('ì´ë¯¸ ì´ˆëŒ€í•˜ê±°ë‚˜ ì¹œêµ¬ ìƒíƒœì…ë‹ˆë‹¤.');
+    ShowMessage('ÀÌ¹Ì ÃÊ´ëÇÏ°Å³ª Ä£±¸ »óÅÂÀÔ´Ï´Ù.');
     Exit;
    end;
 
@@ -87,7 +87,7 @@ begin
   FDQuery1.ParamByName('requester_id').AsWideString := requester_id;
   FDQuery1.ParamByName('receiver_id').AsWideString := receiver_id;
   FDQuery1.ExecSQL;
-  ShowMessage('ì¹œêµ¬ ì¶”ê°€ ìš”ì²­ì´ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.');
+  ShowMessage('Ä£±¸ Ãß°¡ ¿äÃ»ÀÌ ¼º°øÀûÀ¸·Î ¿Ï·áµÇ¾ú½À´Ï´Ù.');
   Form16.Close;
 
   TForm14.Create(Application);
@@ -127,7 +127,7 @@ begin
     '     OR (f.receiver_id = (SELECT id FROM `user` WHERE userno = :myno) AND f.requester_id = u.id) ) ' +
     ' WHERE cu.UserNo = :myno AND cu2.UserNo != :myno ' +
     '   AND (f.status IS NULL OR (f.status != 2 AND f.status != 1))';
-  // ì¶”ì²œ ì¹œêµ¬ 
+    // ÃßÃµ Ä£±¸
   FDQuery1.ParamByName('myno').AsInteger := myno;
   FDQuery1.Open;
 
@@ -167,10 +167,10 @@ begin
       AcceptBtn.Top := 20;
       AcceptBtn.Width := 70;
       AcceptBtn.Height := 30;
-      AcceptBtn.Caption := 'ì¹œêµ¬ ì¶”ê°€';
+      AcceptBtn.Caption := 'Ä£±¸ Ãß°¡';
       AcceptBtn.Font.Name := 'Malgun Gothic';
       AcceptBtn.Font.Size := 9;
-      AcceptBtn.Anchors := [akTop, akRight];
+      AcceptBtn.Anchors := [akTop, akRight]; // À§Ä¡ °íÁ¤
       AcceptBtn.Tag :=  FDQuery1.FieldByName('recommended_userno').AsInteger;
       AcceptBtn.OnClick := AcceptButtonClick;
 
@@ -204,7 +204,6 @@ begin
     selectedUserNo := TButton(Sender).Tag;
     requester_id := CurrentUser.ID;
 
-    // FDQuery1ì„ ì¬ì‚¬ìš© (ì´ë¯¸ í¼ì— ìƒì„±ë¨)
     FDQuery1.Close;
     FDQuery1.SQL.Text := 'SELECT id FROM `user` WHERE userno = :userno';
     FDQuery1.ParamByName('userno').AsInteger := selectedUserNo;
@@ -220,15 +219,15 @@ begin
       FDQuery1.ParamByName('receiver_id').AsWideString := receiver_id;
       FDQuery1.ExecSQL;
 
-      ShowMessage('ì¹œêµ¬ ì¶”ê°€ ìš”ì²­ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.');
+      ShowMessage('Ä£±¸ Ãß°¡ ¿äÃ»ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.');
 
-      // ì¶”ê°€ëœ íŒ¨ë„ ì œê±°
+      // Ãß°¡µÈ ÆĞ³Î Á¦°Å
       if Sender is TButton then
         TButton(Sender).Parent.Free;
     end
     else
     begin
-      ShowMessage('ì‚¬ìš©ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.');
+      ShowMessage('»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.');
     end;
 
     FDQuery1.Close;
@@ -248,5 +247,4 @@ begin
 end;
 
 end.
-
 

@@ -200,9 +200,9 @@ object Form3: TForm3
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Server=localhost'
-      'Database= '
-      'User_Name='
-      'Password='
+      'Database=chating app'
+      'User_Name=root'
+      'Password=1234'
       'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Connected = True
@@ -211,4 +211,3 @@ object Form3: TForm3
     Top = 304
   end
 end
-

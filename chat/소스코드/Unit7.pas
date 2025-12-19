@@ -170,25 +170,30 @@ var
 begin
   FDQueryMembers.Close;
   FDQueryMembers.SQL.Text :=
-    'SELECT chating.c_no, chat_user.ChatRoomId, '+
-    'chat.chatroomname AS room_name,  ' +
-    'DATE_FORMAT(chating.nowtime, "%Y-%m-%d") AS date, '+
-    'DATE_FORMAT(chating.nowtime, "%H:%i") AS time, ' +
-    'chating.contents AS last_message FROM chat_user '+
-    'JOIN chat ON chat_user.ChatRoomId = chat.ChatRoomId '+
-    'JOIN ( SELECT c.* FROM chating c JOIN ( '+
-    'SELECT ChatRoomId, MAX(nowtime) AS latest_time '+
-    'FROM chating GROUP BY ChatRoomId ' +
-    ') latest ON c.ChatRoomId = latest.ChatRoomId  ' +
-    'AND c.nowtime = latest.latest_time '+
-    ') chating ON chat_user.ChatRoomId = chating.ChatRoomId '+
-    'WHERE chat_user.userno = :userno AND chating.contents IS NOT NULL '+
-    'ORDER BY chating.nowtime asc ';
+   ' SELECT chating.c_no, chat_user.ChatRoomId,                        ' +
+   'chat.chatroomname AS room_name,                                    ' +
+   ' DATE_FORMAT(chating.nowtime, "%Y-%m-%d") AS date,                 ' +
+   ' DATE_FORMAT(chating.nowtime, "%H:%i") AS time,                    ' +
+   ' chating.contents AS last_message, pin FROM chat_user              ' +
+   ' JOIN chat ON chat_user.ChatRoomId = chat.ChatRoomId               ' +
+   ' JOIN ( SELECT c.* FROM chating c JOIN (                           ' +
+   ' SELECT ChatRoomId, MAX(nowtime) AS latest_time                    ' +
+   ' FROM chating GROUP BY ChatRoomId                                  ' +
+   ' ) latest ON c.ChatRoomId = latest.ChatRoomId                      ' +
+   ' AND c.nowtime = latest.latest_time                                ' +
+   ' ) chating ON chat_user.ChatRoomId = chating.ChatRoomId            ' +
+   ' WHERE chat_user.userno = :userno AND chating.contents IS NOT NULL ' +
+   ' order by pin asc ,pin_updated asc, chating.nowtime asc            ' ;
 
   FDQueryMembers.ParamByName('userno').AsInteger := UserNo;
   FDQueryMembers.Open;
 
   ScrollBox1.DestroyComponents;
+
+  if FDQueryMembers.FieldByName('pin').AsInteger = 1 then
+  begin
+
+  end;
 
   FDQuery1 := TFDQuery.Create(nil);
   try
@@ -325,6 +330,7 @@ begin
     FDQueryMembers.Close;
     FDQueryMembers.SQL.Text :=
       'SELECT COUNT(userno) AS num FROM chat_user WHERE ChatRoomId = :Roomid';
+      // 방 인원수
     FDQueryMembers.ParamByName('RoomId').AsInteger := RoomID;
     FDQueryMembers.Open;
 

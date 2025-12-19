@@ -109,6 +109,7 @@ begin
     'LEFT JOIN user u ON cu.UserNo = u.userno ' +
     'WHERE c.ChatRoomId = :roomid ' +
     'GROUP BY c.ChatRoomId, c.chatroomname, c.chatpw';
+    // 방 정보 불러오기
 
   FDQueryMembers.ParamByName('roomid').AsInteger := Form1.ChatRoomId;
   FDQueryMembers.Open;

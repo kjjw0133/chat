@@ -101,13 +101,12 @@ object Form9: TForm9
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Server=localhost'
-      'Database= '
-      'User_Name='
-      'Password='
+      'Database=chating app'
+      'User_Name=root'
+      'Password=1234'
       'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Left = 410
     Top = 16
   end
 end
-

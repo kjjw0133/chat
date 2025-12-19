@@ -140,7 +140,6 @@ begin
     CurrentUserId := FDQuery1.FieldByName('id').AsString;
     FDQuery1.Close;
 
-    // friend 테이블은 user.id를 참조하므로 id로 조회
     FDQuery1.SQL.Text :=
       'SELECT ' +
       '  CASE ' +
@@ -161,7 +160,7 @@ begin
       'WHERE (f.requester_id = :current_user_id OR f.receiver_id = :current_user_id) ' +
       '  AND f.status = 2 ' +
       'ORDER BY friend_name';
-
+    // 친구 조회
     FDQuery1.ParamByName('current_user_id').AsString := CurrentUserId;
     FDQuery1.Open;
 
@@ -235,7 +234,7 @@ begin
   pbSearchBG.Invalidate;
 end;
 
-{ ---------------- PaintBox: search bar ---------------- }
+{ ---------------- 검색 기능 ---------------- }
 procedure TForm13.pbSearchBGPaint(Sender: TObject);
 var
   C: TCanvas;
@@ -286,7 +285,7 @@ procedure TForm13.lbFriendsDrawItem(Control: TWinControl; Index: Integer;
   Rect: TRect; State: TOwnerDrawState);
 var
   C: TCanvas;
-  sName: String;  // WideString -> String 변경
+  sName: String;
   isSel: Boolean;
   YCenter: Integer;
   avatarRect, checkboxRect, R: TRect;

@@ -58,7 +58,6 @@ begin
   try
     Query.Connection := FConnection;
 
-    // 1. UserNo·Î UserId Á¶È¸
     Query.SQL.Text := 'SELECT id FROM user WHERE userno = :userno';
     Query.ParamByName('userno').AsInteger := CurrentUserNo;
     Query.Open;
@@ -69,7 +68,6 @@ begin
     CurrentUserId := Query.FieldByName('id').AsString;
     Query.Close;
 
-    // 2. Ä£±¸ ¸ñ·Ï Á¶È¸
     Query.SQL.Text :=
       'SELECT ' +
       '  CASE ' +
@@ -90,7 +88,7 @@ begin
       'WHERE (f.requester_id = :current_user_id OR f.receiver_id = :current_user_id) ' +
       '  AND f.status = 2 ' +
       'ORDER BY friend_name';
-
+      // 친구 목록 조회
     Query.ParamByName('current_user_id').AsString := CurrentUserId;
     Query.Open;
 

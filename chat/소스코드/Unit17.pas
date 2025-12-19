@@ -122,7 +122,6 @@ begin
       'WHERE f.receiver_id = :current_user_id ' +
       '  AND f.status = 1 ' +
       'ORDER BY f.request_id DESC';
-
     Query.ParamByName('current_user_id').AsString := CurrentUserId;
     Query.Open;
 

@@ -130,9 +130,9 @@ object Form7: TForm7
     end
   end
   object ScrollBox1: TScrollBox
-    Left = 53
+    Left = 78
     Top = 134
-    Width = 388
+    Width = 363
     Height = 510
     Color = clWhite
     ParentColor = False
@@ -179,7 +179,7 @@ object Form7: TForm7
   object Panel1: TPanel
     Left = 0
     Top = 134
-    Width = 57
+    Width = 81
     Height = 510
     Color = clSilver
     ParentBackground = False
@@ -187,22 +187,34 @@ object Form7: TForm7
     object SpeedButton1: TSpeedButton
       Left = 5
       Top = 24
-      Width = 42
+      Width = 67
       Height = 49
       Caption = #52828#44396' '#52285
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
       OnClick = SpeedButton1Click
     end
     object SpeedButton2: TSpeedButton
       Left = 5
       Top = 96
-      Width = 42
+      Width = 67
       Height = 49
       Caption = #47700#51064' '#52292#54021' '#52285
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
     end
     object SpeedButton3: TSpeedButton
       Left = 5
       Top = 168
-      Width = 42
+      Width = 67
       Height = 49
       Caption = #45908#48372#44592
       OnClick = SpeedButton3Click
@@ -211,9 +223,9 @@ object Form7: TForm7
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Server=localhost'
-      'Database= '
-      'User_Name='
-      'Password='
+      'Database=chating app'
+      'User_Name=root'
+      'Password=1234'
       'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Connected = True
@@ -225,7 +237,7 @@ object Form7: TForm7
     Connection = FDConnection1
     SQL.Strings = (
       'select * from user')
-    Left = 192
+    Left = 224
     Top = 408
   end
   object Timer1: TTimer
@@ -234,9 +246,8 @@ object Form7: TForm7
     Top = 320
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    VendorLib = '\libmysql.dll'
+    VendorLib = 'C:\MYPROGRAM\delphi\mysql\mysql-5.7.33-win32\lib\libmysql.dll'
     Left = 112
     Top = 400
   end
 end
-

@@ -64,13 +64,12 @@ object Form5: TForm5
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Server=localhost'
-      'Database= '
-      'User_Name='
-      'Password='
+      'Database=chating app'
+      'User_Name=root'
+      'Password=1234'
       'CharacterSet=utf8mb4'
       'DriverID=MySQL')
     Left = 596
     Top = 413
   end
 end
-

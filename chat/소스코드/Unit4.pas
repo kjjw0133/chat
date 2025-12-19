@@ -136,6 +136,7 @@ try
   Msg.Encoding := meMIME;
   Msg.ContentType := 'text/html';
 
+  // 이메일 양식 html로 변경 가능
   Msg.Body.Text :=
     '<br><b style= " font-size: 30px;">아래의 인증번호를 입력하세요.</b></br>' + sLineBreak +
     '<h1 style= " font-size: 30px;">'+ PW + '</h1>' + sLineBreak + sLineBreak +
