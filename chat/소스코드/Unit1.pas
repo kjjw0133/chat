@@ -222,7 +222,7 @@ begin
     FDQueryMembers.ExecSQL;
   end;
 
-  // ✅ 실시간으로 인원수 조회
+  // 실시간으로 인원수 조회
   FDQueryMembers.Close;
   FDQueryMembers.SQL.Text :=
     'SELECT COUNT(userno) AS num FROM chat_user WHERE ChatRoomId = :roomid';
@@ -404,7 +404,7 @@ begin
   // 오늘 날짜 레코드가 없으면 DB에 삽입하고 서버에 브로드캐스트
   if (todayCount = 0) then
   begin
-    // ✅ UI에 먼저 표시 (로컬)
+    // UI에 먼저 표시 (로컬)
     RichEdit1.Paragraph.Alignment := taCenter;
     RichEdit1.Paragraph.LeftIndent := 0;
     RichEdit1.Paragraph.RightIndent := 0;
@@ -426,7 +426,6 @@ begin
       FDQueryMembers.ParamByName('day').AsWideString := TodayStr;
       FDQueryMembers.ExecSQL;
 
-      // ✅ 모든 클라이언트에게 날짜 구분선 브로드캐스트
       if ClientSocket1.Active then
       begin
         DateMsg := Format('DATE::%d::%s', [CurrentRoomID, TodayStr]);
@@ -530,7 +529,7 @@ begin
       begin
         dateStr := FDQueryMembers.FieldByName('day').AsString;
 
-        // ✅ 마지막 표시 날짜와 다를 때만 표시
+        // 마지막 표시 날짜와 다를 때만 표시
         if LastDisplayedDate <> dateStr then
         begin
           RichEdit1.Paragraph.Alignment := taCenter;
@@ -570,7 +569,7 @@ begin
   LoadNewMessages;
 
   try
-    // ✅ 실시간 COUNT로 변경
+    // 실시간 COUNT로 변경
     FDQueryMembers.Close;
     FDQueryMembers.SQL.Text :=
       'SELECT COUNT(userno) AS num FROM chat_user WHERE ChatRoomId = :roomid';
@@ -656,7 +655,7 @@ begin
     end;
   end
 
-  // ✅ 날짜 구분선 처리 추가
+  // 날짜 구분선 처리 추가
   else if RecvText.StartsWith('DATE::') then
   begin
     parts := RecvText.Split(['::']);
@@ -759,3 +758,4 @@ begin
 end;
 
 end.
+
