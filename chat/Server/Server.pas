@@ -85,7 +85,7 @@ var
   i: Integer;
   RecvStr, SendStr: string;
   parts: TArray<string>;
-  sRoomID, sUser, sBody: string;
+  sRoomID, sUser, sBody, sDate: string;
   cinfo: TClientInfo;
   roomID: Integer;
   conSock: TCustomWinSocket;
@@ -122,6 +122,49 @@ begin
     Exit;
   end
 
+  // ✅ DATE:: 날짜 구분선 처리 추가
+  else if RecvStr.StartsWith('DATE::') then
+  begin
+    parts := RecvStr.Split(['::']);
+    if Length(parts) >= 3 then
+    begin
+      sRoomID := parts[1];
+      sDate := parts[2];
+      roomID := StrToIntDef(sRoomID, -1);
+
+      // 서버 로그
+      RichEdit1.Paragraph.Alignment := taLeftJustify;
+      RichEdit1.SelStart := RichEdit1.GetTextLen;
+      RichEdit1.SelAttributes.Size := 9;
+      RichEdit1.SelAttributes.Color := clBlue;
+      RichEdit1.SelText := Format('[날짜] 방 %s에 날짜 구분선 추가: %s [%s]',
+        [sRoomID, sDate, NowStr]) + sLineBreak;
+
+      // 같은 방의 모든 클라이언트에게 브로드캐스트 (본인 제외)
+      SendStr := Format('DATE::%s::%s', [sRoomID, sDate]);
+
+      for i := 0 to ServerSocket1.Socket.ActiveConnections - 1 do
+      begin
+        conSock := ServerSocket1.Socket.Connections[i];
+        if conSock = Socket then
+          Continue; // 보낸 본인 제외
+
+        if Assigned(conSock.Data) then
+        begin
+          try
+            cinfo := TClientInfo(conSock.Data);
+            if (cinfo.RoomID = roomID) then
+            begin
+              conSock.SendText(SendStr);
+            end;
+          except
+          end;
+        end;
+      end;
+    end;
+    Exit;
+  end
+
   // JOIN_MSG:: 입장 메시지 처리
   else if RecvStr.StartsWith('JOIN_MSG::') then
   begin
@@ -147,7 +190,7 @@ begin
       begin
         conSock := ServerSocket1.Socket.Connections[i];
         if conSock = Socket then
-          Continue; // 보낸 본인 제외
+          Continue;
 
         if Assigned(conSock.Data) then
         begin
@@ -189,7 +232,6 @@ begin
       for i := 0 to ServerSocket1.Socket.ActiveConnections - 1 do
       begin
         conSock := ServerSocket1.Socket.Connections[i];
-        // 퇴장 메시지는 본인도 받을 수 있도록 제외하지 않음
 
         if Assigned(conSock.Data) then
         begin
@@ -235,7 +277,7 @@ begin
       begin
         conSock := ServerSocket1.Socket.Connections[i];
         if conSock = Socket then
-          Continue; // 보낸 본인 제외
+          Continue;
 
         if Assigned(conSock.Data) then
         begin
