@@ -50,45 +50,80 @@ chat/
 ```
 ### 데이터베이스 스키마
 ```
-Users 테이블
-sqlCREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,  -- SHA + Salt 해시
-    salt VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    is_logged_in TINYINT(1) DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+create table user(
+userno int AUTO_INCREMENT primary key ,
+id varchar(20) not null unique ,
+pw varchar(255) not null,
+salt varchar(255),
+name varchar(100) not null,
+email varchar(30) not null check(email like '%@%'),
+role varchar(20) default 'user', /* 권한 user,admin */  
+is_logged_in TINYINT(1) DEFAULT 0 COMMENT '로그인 상태',
+session_id VARCHAR(100) NULL COMMENT '세션 ID',
+login_time DATETIME NULL COMMENT '로그인 시간',
+last_activity DATETIME NULL COMMENT '마지막 활동 시간',
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '계정 생성일',
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일',
+is_active TINYINT(1) DEFAULT 1 COMMENT '계정 활성화',
+readmessage int(1) comment '메시지 읽음 처리'
 );
-ChatRooms 테이블
-sqlCREATE TABLE chat_rooms (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    room_name VARCHAR(100) NOT NULL,
-    is_public TINYINT(1) DEFAULT 0,
-    created_by INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (created_by) REFERENCES users(id)
+
+CREATE TABLE friend(
+  request_id INT AUTO_INCREMENT PRIMARY KEY,
+  requester_id VARCHAR(20) COMMENT '친구 요청을 보낸 user id (A)',
+  receiver_id VARCHAR(20) COMMENT '친구 요청을 받은 user id (B)',
+  status INT DEFAULT 0 COMMENT '0: 대기, 1: 초대 보냄, 2: 초대 수락(친구 상태)',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '요청 시간',
+  CHECK(status < 3 AND status >= 0),
+  FOREIGN KEY (requester_id) REFERENCES user(id) ON DELETE CASCADE,
+  FOREIGN KEY (receiver_id) REFERENCES user(id) ON DELETE CASCADE,
+  -- 중복 친구 관계 방지
+  UNIQUE KEY unique_friendship (requester_id, receiver_id)
 );
-Messages 테이블
-sqlCREATE TABLE messages (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    room_id INT NOT NULL,
-    user_id INT NOT NULL,
-    message TEXT NOT NULL,
-    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (room_id) REFERENCES chat_rooms(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+
+create table chat(
+ChatRoomId int AUTO_INCREMENT primary key, /* 방 번호 */
+num int default 1/* 인원수 */,
+ChatType int not null check (ChatType in(1, 2)) default 2, /* 1: 일반 채팅(비번 있음) , 2 : 공개 채팅 비번 x */
+chatpw varchar(50) default '',
+chatroomname varchar(50) not null
 );
-Friends 테이블
-sqlCREATE TABLE friends (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    friend_id INT NOT NULL,
-    status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (friend_id) REFERENCES users(id)
+
+create table chating(
+c_no int AUTO_INCREMENT primary key,
+ChatRoomId int not null,
+userno int,
+contents varchar(100), /* 글 내용 */
+nowtime datetime default current_timestamp /* 현재 시간 */,
+readchat int comment '읽은 유저 수',
+img varchar(255),	
+file varchar(255),
+day varchar(100)
+,foreign key(ChatRoomId) references chat(ChatRoomId)
+,foreign key(userno) references user(userno)
 );
+
+CREATE TABLE chat_user (
+  ChatRoomId INT NOT NULL,
+  UserNo INT NOT NULL,
+  joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  pin int default 0 comment '0: 기본상태, 1: 상단 고정 상태',
+  pin_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'pin 변경 시간',
+  PRIMARY KEY (ChatRoomId, UserNo),
+  FOREIGN KEY (ChatRoomId) REFERENCES chat(ChatRoomId),
+  FOREIGN KEY (UserNo) REFERENCES user(UserNo)
+);
+
+CREATE TABLE chat_user_read (
+  ChatRoomId INT NOT NULL,
+  UserNo INT NOT NULL,
+  last_read_message_id INT DEFAULT 0 COMMENT '마지막으로 읽은 메시지 ID (-1: 모두 읽음, 0: 읽은 메시지 없음)',
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '업데이트 시간',
+  PRIMARY KEY (ChatRoomId, UserNo),
+  FOREIGN KEY (ChatRoomId) REFERENCES chat(ChatRoomId) ON DELETE CASCADE,
+  FOREIGN KEY (UserNo) REFERENCES user(userno) ON DELETE CASCADE
+);
+
 ```
 ### 사전 요구사항
 
