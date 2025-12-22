@@ -163,42 +163,56 @@ end;
 procedure TForm7.LoadChat(Silent: Boolean = False);
 var
   ChatPanel: TPanel;
-  RoomNameLabel, MemberCountLabel, DateLabel, TimeLabel, LastMsgLabel: TLabel;
+  RoomNameLabel, MemberCountLabel, DateLabel, TimeLabel, LastMsgLabel,testLabel: TLabel;
   TopOffset: Integer;
   RoomID: Integer;
+  test : Integer;
   FDQuery1: TFDQuery;
 begin
   FDQueryMembers.Close;
   FDQueryMembers.SQL.Text :=
-   ' SELECT chating.c_no, chat_user.ChatRoomId,                        ' +
-   'chat.chatroomname AS room_name,                                    ' +
-   ' DATE_FORMAT(chating.nowtime, "%Y-%m-%d") AS date,                 ' +
-   ' DATE_FORMAT(chating.nowtime, "%H:%i") AS time,                    ' +
-   ' chating.contents AS last_message, pin FROM chat_user              ' +
-   ' JOIN chat ON chat_user.ChatRoomId = chat.ChatRoomId               ' +
-   ' JOIN ( SELECT c.* FROM chating c JOIN (                           ' +
-   ' SELECT ChatRoomId, MAX(nowtime) AS latest_time                    ' +
-   ' FROM chating GROUP BY ChatRoomId                                  ' +
-   ' ) latest ON c.ChatRoomId = latest.ChatRoomId                      ' +
-   ' AND c.nowtime = latest.latest_time                                ' +
-   ' ) chating ON chat_user.ChatRoomId = chating.ChatRoomId            ' +
-   ' WHERE chat_user.userno = :userno AND chating.contents IS NOT NULL ' +
-   ' order by pin asc ,pin_updated asc, chating.nowtime asc            ' ;
+                         '  SELECT                                                  '+
+                         '  chating.c_no,                                           '+
+                         '  chat_user.ChatRoomId,                                   '+
+                         '  chat.chatroomname AS room_name,                         '+
+                         '  DATE_FORMAT(chating.nowtime, "%Y-%m-%d") AS date,       '+
+                         ' DATE_FORMAT(chating.nowtime, "%H:%i") AS time,           '+
+                         '  chating.contents AS last_message,                       '+
+                         '  chat_user.pin,                                          '+
+                         '  cu_cnt.num AS user_count                                '+
+                         ' FROM chat_user                                           '+
+                         ' JOIN chat                                                '+
+                         '    ON chat_user.ChatRoomId = chat.ChatRoomId             '+
+                         ' JOIN (                                                   '+
+                         '     SELECT c.*                                           '+
+                         '     FROM chating c                                       '+
+                         '     JOIN (                                               '+
+                         '         SELECT ChatRoomId, MAX(nowtime) AS latest_time   '+
+                         '         FROM chating                                     '+
+                         '         GROUP BY ChatRoomId                              '+
+                         '     ) latest                                             '+
+                         '         ON c.ChatRoomId = latest.ChatRoomId              '+
+                         '        AND c.nowtime = latest.latest_time                '+
+                         ' ) chating                                                '+
+                         '     ON chat_user.ChatRoomId = chating.ChatRoomId         '+
+                         ' JOIN (                                                   '+
+                         '     SELECT ChatRoomId, COUNT(userno) AS num              '+
+                         '     FROM chat_user                                       '+
+                         '     GROUP BY ChatRoomId                                  '+
+                         ' ) cu_cnt                                                 '+
+                         '     ON chat_user.ChatRoomId = cu_cnt.ChatRoomId          '+
+                         ' WHERE chat_user.userno = :userno                         '+
+                         '   AND chating.contents IS NOT NULL                       '+
+                         ' ORDER BY chat_user.pin ASC,                              '+
+                         '          chat_user.pin_updated ASC,                      '+
+                         '          chating.nowtime ASC ' ;
 
   FDQueryMembers.ParamByName('userno').AsInteger := UserNo;
   FDQueryMembers.Open;
 
   ScrollBox1.DestroyComponents;
 
-  if FDQueryMembers.FieldByName('pin').AsInteger = 1 then
-  begin
-
-  end;
-
-  FDQuery1 := TFDQuery.Create(nil);
-  try
-    FDQuery1.Connection := FDConnection1;
-
+      test := 0;
     TopOffset := 10;
     while not FDQueryMembers.Eof do
     begin
@@ -211,6 +225,14 @@ begin
       ChatPanel.Caption := '';
       ChatPanel.Tag := RoomID;
       ChatPanel.OnClick := ChatPanelClick;
+
+//      Inc(test);
+//      testLabel := TLabel.Create(ChatPanel);
+//      testLabel.Parent := ChatPanel;
+//      testLabel.Caption := IntToStr(test);
+//      testLabel.Left := 10;
+//      testLabel.Top := 8;
+
 
       RoomNameLabel := TLabel.Create(ChatPanel);
       RoomNameLabel.Parent := ChatPanel;
@@ -238,17 +260,11 @@ begin
       LastMsgLabel.Tag := ChatPanel.Tag;
       LastMsgLabel.OnClick := ChatPanelClick;
 
-      FDQuery1.Close;
-      FDQuery1.SQL.Text :=
-        'SELECT COUNT(userno) AS num FROM chat_user WHERE ChatRoomId = :Roomid';
-      FDQuery1.ParamByName('RoomId').AsInteger := RoomID;
-      FDQuery1.Open;
-
       MemberCountLabel := TLabel.Create(ChatPanel);
       MemberCountLabel.Parent := ChatPanel;
       MemberCountLabel.Left := 200;
       MemberCountLabel.Top := 8;
-      MemberCountLabel.Caption := Format('인원: %d명', [FDQuery1.FieldByName('num').AsInteger]);
+      MemberCountLabel.Caption := Format('인원: %d명', [FDQueryMembers.FieldByName('user_count').AsInteger]);
       MemberCountLabel.Tag := ChatPanel.Tag;
       MemberCountLabel.OnClick := ChatPanelClick;
 
@@ -258,10 +274,6 @@ begin
 
     if (FDQueryMembers.RecordCount = 0) and (not Silent) then
       ShowMessage('참여 중인 채팅방이 없습니다.');
-
-  finally
-    FDQuery1.Free;
-  end;
 
   FDQueryMembers.Close;
 end;
