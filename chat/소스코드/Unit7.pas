@@ -124,6 +124,8 @@ begin
   Self.BringToFront;
 end;
 
+// Unit7.pas의 SpeedButton3Click 수정
+
 procedure TForm7.SpeedButton3Click(Sender: TObject);
 var
   FriendRequestForm: TForm17;
@@ -143,6 +145,7 @@ begin
     end;
   end;
 
+  // Form17 생성 및 표시
   FriendRequestForm := TForm17.Create(Application);
   try
     FriendRequestForm.Position := poScreenCenter;
@@ -161,7 +164,6 @@ procedure TForm7.LoadChat(Silent: Boolean = False);
 var
   ChatPanel: TPanel;
   RoomNameLabel, MemberCountLabel, DateLabel, TimeLabel, LastMsgLabel,testLabel: TLabel;
-  TopOffset: Integer;
   RoomID: Integer;
   test : Integer;
   FDQuery1: TFDQuery;
@@ -209,8 +211,7 @@ begin
 
   ScrollBox1.DestroyComponents;
 
-      test := 0;
-    TopOffset := 10;
+    test := 0;
     while not FDQueryMembers.Eof do
     begin
       RoomID := FDQueryMembers.FieldByName('ChatRoomId').AsInteger;
@@ -265,7 +266,6 @@ begin
       MemberCountLabel.Tag := ChatPanel.Tag;
       MemberCountLabel.OnClick := ChatPanelClick;
 
-      TopOffset := TopOffset + ChatPanel.Height + 5;
       FDQueryMembers.Next;
     end;
 
@@ -595,4 +595,3 @@ begin
 end;
 
 end.
-
