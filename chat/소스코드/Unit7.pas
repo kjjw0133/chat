@@ -161,7 +161,7 @@ end;
 procedure TForm7.LoadChat(Silent: Boolean = False);
 var
   ChatPanel: TPanel;
-  RoomNameLabel, MemberCountLabel, DateLabel, TimeLabel, LastMsgLabel,testLabel: TLabel;
+  RoomNameLabel, MemberCountLabel, DateLabel, TimeLabel, LastMsgLabel: TLabel;
   RoomID: Integer;
   test : Integer;
   FDQuery1: TFDQuery;
@@ -208,8 +208,7 @@ begin
   FDQueryMembers.Open;
 
   ScrollBox1.DestroyComponents;
-
-    test := 0;
+  
     while not FDQueryMembers.Eof do
     begin
       RoomID := FDQueryMembers.FieldByName('ChatRoomId').AsInteger;
@@ -221,14 +220,6 @@ begin
       ChatPanel.Caption := '';
       ChatPanel.Tag := RoomID;
       ChatPanel.OnClick := ChatPanelClick;
-
-//      Inc(test);
-//      testLabel := TLabel.Create(ChatPanel);
-//      testLabel.Parent := ChatPanel;
-//      testLabel.Caption := IntToStr(test);
-//      testLabel.Left := 10;
-//      testLabel.Top := 8;
-
 
       RoomNameLabel := TLabel.Create(ChatPanel);
       RoomNameLabel.Parent := ChatPanel;
@@ -267,7 +258,7 @@ begin
       FDQueryMembers.Next;
     end;
 
-    if (FDQueryMembers.RecordCount = 0) and (not Silent) then
+    if (FDQueryMembers.RecordCount = 0) then
       ShowMessage('참여 중인 채팅방이 없습니다.');
 
   FDQueryMembers.Close;
@@ -593,4 +584,5 @@ begin
 end;
 
 end.
+
 
